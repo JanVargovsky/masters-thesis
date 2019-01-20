@@ -340,9 +340,6 @@ ASALocalRun/
 # BeatPulse healthcheck temp database 
 healthchecksdb
 
-# Frontend
-node_modules
-/dist
 
 # local env files
 .env.local
@@ -362,6 +359,9 @@ yarn-error.log*
 *.sln
 *.sw*
 
-# Custom
+# Backend
 data/
+
+# Frontend
+dist/
 
