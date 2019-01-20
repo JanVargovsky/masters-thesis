@@ -8,7 +8,7 @@ api = Namespace('dataset')
 @api.route('/<string:dataset>/<int:rows>')
 class Dataset(Resource):
     def get(self, dataset, rows=None):
-        df = get_dataset(dataset, rows)
+        df = get_dataset(dataset, rows, True)
         columns = df.columns.values.tolist()
         column_types = list(map(lambda t: t.name, df.dtypes.values))
         data_preview = df.values.tolist()

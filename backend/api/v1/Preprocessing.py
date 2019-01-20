@@ -1,7 +1,6 @@
 from flask_restplus import Namespace, Resource, fields
 from infrastructure.DatasetUtils import get_dataset, save_dataset
 from infrastructure.Preprocessing import train_test_split
-from pathlib import Path
 
 api = Namespace('preprocessing')
 
@@ -32,6 +31,3 @@ class Split(Resource):
 
         return None, 200
 
-    def _create_dataset_name(self, name, type):
-        path = Path(name)
-        path.stem

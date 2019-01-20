@@ -94,7 +94,8 @@ export default {
     },
     typeToIcon: function(value) {
       if (value === "csv") return "mdi-file-delimited";
-      if (value === "txt") return "mdi-file-document";
+      if (value === "excel") return "mdi-file-excel";
+      if (value === "text") return "mdi-file-document";
       return "mdi-file";
     }
   },
@@ -109,7 +110,9 @@ export default {
           item.lastModifiedAt = new Date(item.lastModifiedAt);
         });
         this.datasets = response.data;
-      } catch (error) {}
+      } catch (error) {
+        this.error = true;
+      }
       this.loading = false;
     }
   }

@@ -1,5 +1,6 @@
 <template>
   <v-card>
+    <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
     <v-card-title>
       <v-icon large>mdi-database</v-icon>
       {{ dataset }}
@@ -35,7 +36,8 @@ export default {
       columns: [],
       rows: [],
       search: "",
-      loading: false
+      loading: false,
+      error: false
     };
   },
   async created() {

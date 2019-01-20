@@ -24,7 +24,7 @@
               <v-flex xs12 v-if="dataset">
                 <v-subheader
                   class="pa-0"
-                >Estimated split ({{ trainPercent | formatPercent }} vs {{ testPercent | formatPercent }})</v-subheader>
+                >Split ratio ({{ trainPercent | formatPercent }} vs {{ testPercent | formatPercent }})</v-subheader>
                 <v-text-field v-model="train" readonly label="Train rows" :error="train == 0"></v-text-field>
                 <v-text-field v-model="test" readonly label="Test rows" :error="test == 0"></v-text-field>
               </v-flex>
@@ -46,7 +46,7 @@
                 >Server error.</v-alert>
                 <v-btn
                   color="primary"
-                  :disabled="train === 0 || test === 0  || done"
+                  :disabled="train === 0 || test === 0"
                   :loading="submitLoading"
                   @click="submit"
                 >Split</v-btn>
@@ -88,6 +88,7 @@ export default {
   methods: {
     async submit() {
       try {
+        this.done = false;
         this.submitLoading = true;
         this.submitError = false;
         await this.$http.put("api/v1/preprocessing/split", {
@@ -95,7 +96,7 @@ export default {
           ratio: this.ratio / Units,
           shuffle: true,
           trainDataset: this.trainDatasetName,
-          testDataset: this.trainDatasetName
+          testDataset: this.testDatasetName
         });
         this.done = true;
       } catch {
