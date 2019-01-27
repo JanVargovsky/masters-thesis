@@ -8,15 +8,30 @@
       <v-text-field v-model="search" label="Search" single-line hide-details clearable/>
     </v-card-title>
 
-    <v-data-table :headers="headers" :items="rows" :search="search" :loading="loading">
+    <v-data-table
+      :headers="headers"
+      :items="rows"
+      :search="search"
+      :loading="loading"
+      :rows-per-page-items="[10, 25, 50, 100]"
+    >
       <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
       <template slot="items" slot-scope="props">
-        <td class="shrink">{{ props.item.id }}</td>
-        <td
-          v-for="(item, index) in props.item.values"
-          :key="String(props.item.id) + String(index) + String(item)"
-        >{{ item }}</td>
+        <tr :class="{'red lighten-5': props.item.hasNA}">
+          <td class="shrink">{{ props.item.id }}</td>
+          <td
+            v-for="(item, index) in props.item.values"
+            :key="String(props.item.id) + String(index) + String(item)"
+            :class="{'red': item === NA }"
+          >
+            <v-tooltip top v-if="item === NA">
+              <span slot="activator">{{ item }}</span>
+              <span>Missing value</span>
+            </v-tooltip>
+            <span v-else>{{ item }}</span>
+          </td>
+        </tr>
       </template>
 
       <template slot="no-data">
@@ -33,6 +48,7 @@ export default {
   },
   data() {
     return {
+      NA: "NA",
       columns: [],
       rows: [],
       search: "",
@@ -57,6 +73,9 @@ export default {
           sortable: false
         }))
       ];
+    },
+    isNA(value) {
+      return value === null;
     }
   },
   watch: {
@@ -72,9 +91,10 @@ export default {
         var response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
         const data = response.data;
         this.columns = data.columns;
-        this.rows = data.rows.map((value, index) => ({
+        this.rows = data.rows.map((row, index) => ({
           id: index,
-          values: value
+          hasNA: row.some(value => value === null),
+          values: row.map(value => (value !== null ? value : this.NA))
         }));
       } catch (error) {
         this.error = true;
