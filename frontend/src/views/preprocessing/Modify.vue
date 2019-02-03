@@ -54,7 +54,7 @@
                     <v-switch v-model="column.na" label="Fix missing values" color="green"/>
                   </v-flex>
                   <v-flex shrink>
-                    <v-radio-group v-if="column.na" v-model="column.naSelected" row class="pl-3">
+                    <v-radio-group v-if="column.na" v-model="column.naMethod" row class="pl-3">
                       <v-radio v-if="isNumber(column)" label="Using 0" value="zero" color="green"/>
                       <v-radio
                         v-if="isNumber(column)"
@@ -68,7 +68,7 @@
                   </v-flex>
                   <v-flex shrink>
                     <v-text-field
-                      v-if="column.na && column.naSelected === 'custom'"
+                      v-if="column.na && column.naMethod === 'custom'"
                       v-model="column.naCustomValue"
                       class="pl-3"
                       label="Custom value"
@@ -77,7 +77,7 @@
                     />
                   </v-flex>
                 </v-layout>
-                <!-- Categorial -->
+                <!-- Categorical -->
                 <v-layout row v-if="!column.remove && isCategorical(column)">
                   <v-flex shrink>
                     <v-switch v-model="column.encode" label="Encode" color="blue"/>
@@ -85,7 +85,7 @@
                   <v-flex shrink>
                     <v-radio-group
                       v-if="column.encode"
-                      v-model="column.encodeType"
+                      v-model="column.encodeMethod"
                       row
                       class="pl-3"
                     >
@@ -141,7 +141,7 @@ export default {
   },
   methods: {
     isNumber(column) {
-      return column.type === "int" || column.type === "float";
+      return column.type === "int64" || column.type === "float64";
     },
     isCategorical(column) {
       return column.type === "object";
@@ -153,6 +153,20 @@ export default {
         this.submitError = false;
         await this.$http.put(`api/v1/preprocessing/modify/${this.dataset}`, {
           newDatasetName: this.newDatasetName,
+          columns: this.columns.map(column => ({
+            name: column.name,
+            remove: column.remove,
+            normalize: column.normalize,
+            normalizeRange: {
+              min: parseFloat(column.normalizeRange.min),
+              max: parseFloat(column.normalizeRange.max)
+            },
+            na: column.na,
+            naMethod: column.naMethod,
+            naCustomValue: column.naCustomValue,
+            encode: column.encode,
+            encodeMethod: column.encodeMethod,
+          }))
         });
         this.done = true;
       } catch {
@@ -163,12 +177,11 @@ export default {
   },
   watch: {
     dataset: async function() {
-      const response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
-      const types = ["int", "float", "object"];
-      this.columns = response.data.columns.map((name, index) => ({
-        name: name,
-        type: types[index % types.length],
-        hasNA: index <= types.length,
+      const response = await this.$http.get(`/api/v1/preprocessing/modify/${this.dataset}`);
+      this.columns = response.data.columns.map(column => ({
+        name: column.name,
+        type: column.type,
+        hasNA: column.hasNA,
 
         remove: false,
 
@@ -179,11 +192,11 @@ export default {
         },
 
         na: false,
-        naSelected: undefined,
+        naMethod: undefined,
         naCustomValue: undefined,
 
         encode: false,
-        encodeType: undefined
+        encodeMethod: undefined
       }));
 
       const index = this.dataset.lastIndexOf(".");

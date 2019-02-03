@@ -52,7 +52,7 @@ def save_dataset(dataset, name):
     if file_type == 'csv':
         dataset.to_csv(path, index=False)
     elif file_type == 'excel':
-        return dataset.to_excel(path, index=False)
+        dataset.to_excel(path, index=False)
     else:
         raise Exception("Unknown dataset type")
 
