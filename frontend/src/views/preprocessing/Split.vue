@@ -2,7 +2,7 @@
   <v-layout row wrap>
     <v-flex xs12>
       <v-card>
-        <v-toolbar color="primary" dark flat dense cad>
+        <v-toolbar color="green" dark flat dense>
           <v-toolbar-title class="subheading">Split dataset into train and test</v-toolbar-title>
         </v-toolbar>
         <v-card-text>
@@ -15,7 +15,8 @@
                   :items="datasets"
                   label="Select dataset to split"
                   editable
-                ></v-overflow-btn>
+                  class="pt-0 mt-0"
+                />
               </v-flex>
               <v-flex xs12 v-if="dataset">
                 <v-subheader class="pa-0">{{ rows }} rows to split</v-subheader>

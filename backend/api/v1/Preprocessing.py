@@ -31,3 +31,11 @@ class Split(Resource):
 
         return None, 200
 
+
+@api.route('/modify/<string:dataset>')
+class Modify(Resource):
+    def get(self, dataset):
+        pass
+
+    def put(self, dataset):
+        pass
