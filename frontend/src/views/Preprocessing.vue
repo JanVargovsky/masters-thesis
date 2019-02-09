@@ -5,7 +5,7 @@
     </v-toolbar>
     <v-card-text>
       <v-btn dark color="red" to="modify" append>Modify</v-btn>
-      <v-btn dark color="green" to="split" append>Split</v-btn>
+      <v-btn dark color="amber darken-3" to="split" append>Split</v-btn>
     </v-card-text>
   </v-card>
 </template>

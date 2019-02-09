@@ -2,7 +2,7 @@
   <v-layout row wrap>
     <v-flex xs12>
       <v-card>
-        <v-toolbar color="green" dark flat dense>
+        <v-toolbar color="amber darken-3" dark flat dense>
           <v-toolbar-title class="subheading">Split dataset into train and test</v-toolbar-title>
         </v-toolbar>
         <v-card-text>

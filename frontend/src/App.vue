@@ -1,16 +1,30 @@
 <template>
   <v-app>
     <v-navigation-drawer v-model="drawer" clipped fixed app>
-      <v-list dense>
-        <v-list-tile v-for="item in items" :key="item.to" :to="item.link">
-          <v-list-tile-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-tile-action>
-
-          <v-list-tile-content>
+      <v-list expand>
+        <template v-for="item in items">
+          <v-list-tile v-if="!item.items" :key="item.title" :to="item.link">
+            <v-list-tile-action>
+              <v-icon>{{ item.icon }}</v-icon>
+            </v-list-tile-action>
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
+          </v-list-tile>
+
+          <v-list-group v-else :key="item.to" :prepend-icon="item.icon" no-action>
+            <v-list-tile slot="activator">
+              <v-list-tile-content>
+                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+              </v-list-tile-content>
+            </v-list-tile>
+
+            <v-list-tile v-for="item in item.items" :key="item.to" :to="item.link">
+              <v-list-tile-action>
+                <v-icon>{{ item.icon }}</v-icon>
+              </v-list-tile-action>
+              <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+            </v-list-tile>
+          </v-list-group>
+        </template>
       </v-list>
     </v-navigation-drawer>
 
@@ -36,19 +50,40 @@ export default {
       drawer: true,
       items: [
         { title: "Home", icon: "mdi-home", link: "/" },
-        { title: "Datasets", icon: "mdi-database", link: "/datasets" },
         {
-          title: "Preprocessing",
-          icon: "mdi-settings-outline",
-          link: "/preprocessing"
+          title: "Datasets",
+          icon: "mdi-database",
+          items: [
+            {
+              title: "List",
+              icon: "mdi-view-list",
+              link: "/datasets"
+            },
+            {
+              title: "Preprocessing",
+              icon: "mdi-settings-outline",
+              link: "/preprocessing"
+            },
+            {
+              title: "Statistics",
+              icon: "mdi-chart-bar",
+              link: "/statistics"
+            }
+          ]
+        },
+        {
+          title: "Models",
+          icon: "mdi-cube-outline",
+          items: [
+            {
+              title: "Create",
+              icon: "mdi-cube",
+              link: "/create-model"
+            },
+            { title: "List", icon: "mdi-view-list", link: "/models" }
+          ]
         },
         // { title: "Experiments", icon: "mdi-view-list", link: "/experiments" },
-        {
-          title: "Create model",
-          icon: "mdi-cube-outline",
-          link: "/create-model"
-        },
-        { title: "Models", icon: "mdi-cube", link: "/models" },
         { title: "About", icon: "mdi-information", link: "/about" }
       ]
     };

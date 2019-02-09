@@ -8,6 +8,7 @@ import Dataset from "./views/Dataset.vue";
 import Preprocessing from "./views/Preprocessing.vue";
 import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
+import Statistics from "./views/dataset/Statistics.vue";
 import CreateModel from "./views/CreateModel.vue";
 import Models from "./views/Models.vue";
 
@@ -43,6 +44,10 @@ export default new Router({
     {
       path: "/preprocessing/modify",
       component: PreprocessingModify
+    },
+    {
+      path: "/statistics",
+      component: Statistics
     },
     {
       path: "/create-model",

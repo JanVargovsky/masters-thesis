@@ -1,11 +1,14 @@
 from flask import Flask
 from flask_cors import CORS
 from api.v1 import api_v1
+import matplotlib.pyplot as plt
 
 app = Flask(__name__, static_url_path='', static_folder='../frontend/dist')
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.register_blueprint(api_v1, url_prefix='/api/v1')
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
+
+plt.style.use('ggplot')
 
 
 @app.route('/')
