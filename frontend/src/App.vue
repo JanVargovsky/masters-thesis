@@ -83,7 +83,7 @@ export default {
             { title: "List", icon: "mdi-view-list", link: "/models" }
           ]
         },
-        // { title: "Experiments", icon: "mdi-view-list", link: "/experiments" },
+        { title: "Jobs", icon: "mdi-flask-outline", link: "/jobs" },
         { title: "About", icon: "mdi-information", link: "/about" }
       ]
     };

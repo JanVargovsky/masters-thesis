@@ -9,8 +9,9 @@ import Preprocessing from "./views/Preprocessing.vue";
 import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
 import Statistics from "./views/dataset/Statistics.vue";
-import CreateModel from "./views/CreateModel.vue";
-import Models from "./views/Models.vue";
+import CreateModel from "./views/model/CreateModel.vue";
+import Models from "./views/model/Models.vue";
+import Jobs from "./views/job/Jobs.vue";
 
 Vue.use(Router);
 
@@ -56,6 +57,10 @@ export default new Router({
     {
       path: "/models",
       component: Models
+    },
+    {
+      path: "/jobs",
+      component: Jobs
     },
     {
       path: "*",
