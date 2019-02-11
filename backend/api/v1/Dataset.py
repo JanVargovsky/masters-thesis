@@ -1,8 +1,6 @@
 from flask_restplus import Namespace, Resource
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows
-import matplotlib.pyplot as plt
-import io
-import base64
+from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 import numpy as np
 
 api = Namespace('dataset')
@@ -40,8 +38,8 @@ class DatasetStatistics(Resource):
             series = df[column_name]
             describe = series.describe()
 
-            numeric = np.issubdtype(series.dtype, np.number)
-            if numeric:
+            is_numeric = np.issubdtype(series.dtype, np.number)
+            if is_numeric:
                 descriptive_statistics = {
                     "count": int(describe["count"]),
                     "mean": describe["mean"],
@@ -58,19 +56,13 @@ class DatasetStatistics(Resource):
                     "unique": int(describe["unique"])
                 }
 
-            image = io.BytesIO()
-            plt.title(f"{column_name} histogram")
-            plt.xlabel(column_name)
-            plt.ylabel("Frequency")
-            plt.hist(series.dropna(), bins='auto' if numeric else None)
-            plt.savefig(image, format='png', dpi=150, transparent=False)
-            plt.clf()
-            histogram = base64.b64encode(image.getvalue()).decode()
+            plot_histogram(series, column_name, is_numeric)
+            histogram = plot_to_base64()
 
             columns.append({
                 "name": column_name,
                 "type": series.dtype.name,
-                "numeric": numeric,
+                "numeric": is_numeric,
                 "descriptiveStatistics": descriptive_statistics,
                 "histogramType": "base64",
                 "histogram": histogram
