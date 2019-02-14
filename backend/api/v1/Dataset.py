@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
+from infrastructure.StatisticsCache import store, try_load
 import numpy as np
 
 api = Namespace('dataset')
@@ -32,6 +33,10 @@ class DatasetRows(Resource):
 @api.route('/statistics/<string:dataset>')
 class DatasetStatistics(Resource):
     def get(self, dataset):
+        result = try_load(dataset)
+        if result:
+            return result
+
         df = get_dataset(dataset)
         columns = []
         for column_name in df:
@@ -68,6 +73,9 @@ class DatasetStatistics(Resource):
                 "histogram": histogram
             })
 
-        return {
+        result = {
             "columns": columns
         }
+        store(dataset, result)
+
+        return result
