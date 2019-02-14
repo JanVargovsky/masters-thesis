@@ -1,3 +1,4 @@
+from infrastructure import datasets_path
 import os
 import glob
 from pathlib import Path
@@ -5,8 +6,6 @@ import platform
 from datetime import datetime
 import pandas as pd
 
-data_path = 'data/'
-datasets_path = data_path + 'datasets/'
 supported_types = {
     'csv': ['csv'],
     'text': ['txt'],

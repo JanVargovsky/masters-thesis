@@ -96,12 +96,40 @@
                 </v-layout>
               </v-flex>
               <v-flex xs12 v-if="dataset">
-                <v-text-field v-model="newDatasetName" label="Modified dataset name"></v-text-field>
+                <v-layout>
+                  <v-checkbox v-model="useNewDatasetName" hide-details class="shrink"/>
+                  <v-text-field
+                    v-model="newDatasetName"
+                    :disabled="!useNewDatasetName"
+                    label="New modified dataset name"
+                  />
+                </v-layout>
+                <v-layout>
+                  <v-checkbox v-model="useConfigurationName" hide-details class="shrink"/>
+                  <v-text-field
+                    v-model="configurationName"
+                    :disabled="!useConfigurationName"
+                    label="Configuration name"
+                  />
+                </v-layout>
               </v-flex>
               <v-flex xs12 v-if="dataset">
-                <v-alert :value="done" type="success" transition="scale-transition">
+                <v-alert
+                  :value="done && useNewDatasetName && this.newDatasetName.length !== 0"
+                  type="success"
+                  transition="scale-transition"
+                >
                   Dataset
                   <strong>{{ newDatasetName }}</strong>
+                  has been successfully created.
+                </v-alert>
+                <v-alert
+                  :value="done && useConfigurationName && this.configurationName.length !== 0"
+                  type="success"
+                  transition="scale-transition"
+                >
+                  Configuration
+                  <strong>{{ configurationName }}</strong>
                   has been successfully created.
                 </v-alert>
                 <v-alert
@@ -109,7 +137,12 @@
                   type="error"
                   transition="scale-transition"
                 >Server error.</v-alert>
-                <v-btn color="primary" :loading="submitLoading" @click="submit">Modify</v-btn>
+                <v-btn
+                  :disabled="disableSubmit"
+                  :loading="submitLoading"
+                  @click="submit"
+                  color="primary"
+                >Modify</v-btn>
               </v-flex>
             </v-layout>
           </v-form>
@@ -128,7 +161,10 @@ export default {
 
       columns: [],
 
+      useNewDatasetName: false,
       newDatasetName: undefined,
+      useConfigurationName: false,
+      configurationName: undefined,
 
       submitLoading: false,
       submitError: false,
@@ -151,8 +187,7 @@ export default {
         this.done = false;
         this.submitLoading = true;
         this.submitError = false;
-        await this.$http.put(`api/v1/preprocessing/modify/${this.dataset}`, {
-          newDatasetName: this.newDatasetName,
+        let payload = {
           columns: this.columns.map(column => ({
             name: column.name,
             remove: column.remove,
@@ -165,9 +200,19 @@ export default {
             naMethod: column.naMethod,
             naCustomValue: column.naCustomValue,
             encode: column.encode,
-            encodeMethod: column.encodeMethod,
+            encodeMethod: column.encodeMethod
           }))
-        });
+        };
+        if (this.useNewDatasetName && this.newDatasetName.length !== 0)
+          payload.newDatasetName = this.newDatasetName;
+        if (this.useConfigurationName && this.configurationName.length !== 0)
+          payload.configurationName = this.configurationName;
+
+        await this.$http.put(
+          `api/v1/preprocessing/modify/${this.dataset}`,
+          payload
+        );
+
         this.done = true;
       } catch {
         this.submitError = true;
@@ -177,7 +222,9 @@ export default {
   },
   watch: {
     dataset: async function() {
-      const response = await this.$http.get(`/api/v1/preprocessing/modify/${this.dataset}`);
+      const response = await this.$http.get(
+        `/api/v1/preprocessing/modify/${this.dataset}`
+      );
       this.columns = response.data.columns.map(column => ({
         name: column.name,
         type: column.type,
@@ -204,7 +251,18 @@ export default {
         const name = this.dataset.substr(0, index);
         const extension = this.dataset.substr(index);
         this.newDatasetName = `${name}-preprocessed${extension}`;
+        this.configurationName = `${name}-configuration`;
       }
+    }
+  },
+  computed: {
+    disableSubmit() {
+      if (!this.useNewDatasetName && !this.useConfigurationName) return true;
+      if (this.useNewDatasetName && this.newDatasetName.length === 0)
+        return true;
+      if (this.useConfigurationName && this.configurationName.length === 0)
+        return true;
+      return false;
     }
   }
 };
