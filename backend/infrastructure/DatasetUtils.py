@@ -57,6 +57,11 @@ def save_dataset(dataset, name):
         raise Exception("Unknown dataset type")
 
 
+def delete_dataset(name):
+    path = datasets_path + name
+    os.remove(path)
+
+
 def get_dataset_rows(name):
     file_type = _get_type(name)
     path = datasets_path + name

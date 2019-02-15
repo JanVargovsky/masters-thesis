@@ -1,5 +1,5 @@
 from flask_restplus import Namespace, Resource
-from infrastructure.DatasetUtils import get_dataset, get_dataset_rows
+from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 from infrastructure.StatisticsCache import store, try_load
 from infrastructure.Preprocessing import modify
@@ -9,10 +9,8 @@ import numpy as np
 api = Namespace('dataset')
 
 
-@api.route('/<string:dataset>')
-@api.route('/<string:dataset>/<int:rows>')
-class Dataset(Resource):
-    def get(self, dataset, rows=None):
+class DatasetBase(Resource):
+    def get(self, dataset, rows):
         df = get_dataset(dataset, rows, True)
         columns = df.columns.values.tolist()
         column_types = list(map(lambda t: t.name, df.dtypes.values))
@@ -22,6 +20,22 @@ class Dataset(Resource):
             'columnTypes': column_types,
             'rows': data_preview
         }
+
+
+@api.route('/<string:dataset>')
+class Dataset(DatasetBase):
+    def get(self, dataset):
+        return super().get(dataset, None)
+
+    def delete(self, dataset):
+        delete_dataset(dataset)
+        return None, 204
+
+
+@api.route('/<string:dataset>/<int:rows>')
+class DatasetWithLimitedRows(DatasetBase):
+    def get(self, dataset, rows):
+        return super().get(dataset, rows)
 
 
 @api.route('/rows/<string:dataset>')

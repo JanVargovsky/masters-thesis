@@ -16,7 +16,6 @@
     >
       <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
-      <!-- TODO add basic info about dataset https://vuetifyjs.com/en/components/data-tables#example-expand -->
       <template slot="items" slot-scope="props">
         <td class="shrink">
           <v-tooltip top>
@@ -40,6 +39,19 @@
               <v-icon>mdi-pencil</v-icon>
             </v-btn>
             <span>Edit</span>
+          </v-tooltip>
+          <v-tooltip top>
+            <v-btn
+              slot="activator"
+              fab
+              icon
+              small
+              class="ma-0"
+              @click="deleteDataset(props.item.name)"
+            >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+            <span>Delete</span>
           </v-tooltip>
         </td>
       </template>
@@ -104,7 +116,7 @@ export default {
       try {
         this.loading = true;
         this.datasets = [];
-        var response = await this.$http.get("/api/v1/datasets");
+        const response = await this.$http.get("/api/v1/datasets");
         response.data.forEach(item => {
           item.createdAt = new Date(item.createdAt);
           item.lastModifiedAt = new Date(item.lastModifiedAt);
@@ -114,6 +126,18 @@ export default {
         this.error = true;
       }
       this.loading = false;
+    },
+    async deleteDataset(dataset) {
+      if (confirm(`Are you sure you want to delete ${name}?`)) {
+        try {
+          const response = await this.$http.delete(
+            `/api/v1/dataset/${dataset}`
+          );
+          this.datasets = this.datasets.filter(t => t.name !== dataset);
+        } catch (error) {
+          this.error = true;
+        }
+      }
     }
   }
 };

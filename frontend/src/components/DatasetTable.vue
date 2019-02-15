@@ -88,7 +88,7 @@ export default {
       try {
         this.loading = true;
         this.data = [];
-        var response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
+        const response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
         const data = response.data;
         this.columns = data.columns;
         this.rows = data.rows.map((row, index) => ({
