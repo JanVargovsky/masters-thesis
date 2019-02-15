@@ -1,4 +1,5 @@
 from infrastructure import datasets_path
+from infrastructure.FileUtils import get_extension
 import os
 import glob
 from pathlib import Path
@@ -79,13 +80,8 @@ def _get_creation_timestamp(stat):
             return stat.st_mtime
 
 
-def _get_extension(name):
-    _, ext = os.path.splitext(name)
-    return ext[1:]
-
-
 def _get_type(name):
-    extension = _get_extension(name)
+    extension = get_extension(name)
     for file_type, supported_extensions in supported_types.items():
         if extension in supported_extensions:
             return file_type
