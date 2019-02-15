@@ -142,7 +142,7 @@
                   :loading="submitLoading"
                   @click="submit"
                   color="primary"
-                >Modify</v-btn>
+                >Submit</v-btn>
               </v-flex>
             </v-layout>
           </v-form>
@@ -218,6 +218,10 @@ export default {
         this.submitError = true;
       }
       this.submitLoading = false;
+    },
+    reset() {
+      this.done = false;
+      this.submitError = false;
     }
   },
   watch: {
@@ -253,6 +257,24 @@ export default {
         this.newDatasetName = `${name}-preprocessed${extension}`;
         this.configurationName = `${name}-configuration`;
       }
+    },
+    useNewDatasetName() {
+      this.reset();
+    },
+    newDatasetName() {
+      this.reset();
+    },
+    useConfigurationName() {
+      this.reset();
+    },
+    configurationName() {
+      this.reset();
+    },
+    columns: {
+      handler: function() {
+        this.reset();
+      },
+      deep: true
     }
   },
   computed: {
