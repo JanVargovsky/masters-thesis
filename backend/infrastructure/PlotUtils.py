@@ -1,6 +1,7 @@
-import matplotlib.pyplot as plt
-import io
 import base64
+import io
+
+import matplotlib.pyplot as plt
 
 
 def plot_to_base64():

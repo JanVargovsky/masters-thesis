@@ -1,7 +1,8 @@
-from infrastructure import preprocessing_configuration_path
-import json
 import glob
+import json
 import os
+
+from infrastructure import preprocessing_configuration_path
 
 
 def _get_filename(name):

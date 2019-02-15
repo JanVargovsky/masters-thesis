@@ -1,6 +1,7 @@
-from flask_restplus import Namespace, Resource, fields
 import tensorflow as tf
+from flask_restplus import Namespace, Resource, fields
 from tensorflow import keras
+
 from infrastructure.DatasetUtils import get_dataset
 
 api = Namespace('model')

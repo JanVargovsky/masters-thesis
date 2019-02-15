@@ -1,6 +1,6 @@
+import pandas as pd
 from sklearn.model_selection import train_test_split as split
 from sklearn.preprocessing import MinMaxScaler
-import pandas as pd
 
 
 def train_test_split(dataset, ratio, shuffle):

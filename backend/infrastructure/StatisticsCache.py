@@ -1,5 +1,6 @@
-from infrastructure import statistics_cache_path
 import json
+
+from infrastructure import statistics_cache_path
 
 
 def _get_filename(dataset, configuration):

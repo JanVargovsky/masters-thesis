@@ -1,10 +1,11 @@
+import numpy as np
 from flask_restplus import Namespace, Resource
+
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
-from infrastructure.StatisticsCache import store, try_load
 from infrastructure.Preprocessing import modify
 from infrastructure.PreprocessingConfiguration import load_configuration
-import numpy as np
+from infrastructure.StatisticsCache import store, try_load
 
 api = Namespace('dataset')
 

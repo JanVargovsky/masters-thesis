@@ -1,11 +1,13 @@
-from infrastructure import datasets_path
-from infrastructure.FileUtils import get_extension
-import os
 import glob
-from pathlib import Path
+import os
 import platform
 from datetime import datetime
+from pathlib import Path
+
 import pandas as pd
+
+from infrastructure import datasets_path
+from infrastructure.FileUtils import get_extension
 
 supported_types = {
     'csv': ['csv'],

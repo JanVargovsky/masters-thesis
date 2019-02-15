@@ -1,7 +1,8 @@
+from importlib import import_module
+from pkgutil import iter_modules
+
 from flask import Blueprint
 from flask_restplus import Api
-from pkgutil import iter_modules
-from importlib import import_module
 
 api_v1 = Blueprint('api/v1', __name__)
 api = Api(api_v1, doc='/docs')
