@@ -5,8 +5,7 @@ import base64
 
 def plot_to_base64():
     image = io.BytesIO()
-    plt.tight_layout()
-    plt.savefig(image, format='png', dpi=150, transparent=False)
+    plt.savefig(image, format='png', dpi=150, transparent=False, bbox_inches='tight')
     plt.clf()
     result = base64.b64encode(image.getvalue()).decode()
     return result
