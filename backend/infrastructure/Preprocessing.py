@@ -1,8 +1,6 @@
-from infrastructure import preprocessing_configuration_path
 from sklearn.model_selection import train_test_split as split
 from sklearn.preprocessing import MinMaxScaler
 import pandas as pd
-import json
 
 
 def train_test_split(dataset, ratio, shuffle):
@@ -10,7 +8,7 @@ def train_test_split(dataset, ratio, shuffle):
     return train, test
 
 
-def modify(columns, df):
+def modify(df, columns):
     for column in columns:
         name = column['name']
         if column['remove']:
@@ -45,14 +43,3 @@ def modify(columns, df):
                     df[dummies.columns] = dummies
                 else:
                     raise Exception(f"Column '{name}' has invalid encode method")
-
-
-def save_configuration(data, name):
-    # TODO: prune
-    with open(f"{preprocessing_configuration_path}{name}.json", 'x') as f:
-        json.dump(data, f, indent=2)
-
-
-def load_configuration(name):
-    with open(f"{preprocessing_configuration_path}{name}.json", 'r') as f:
-        return json.load(f)

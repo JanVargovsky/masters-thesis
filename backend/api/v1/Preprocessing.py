@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from infrastructure.DatasetUtils import get_dataset, save_dataset
-from infrastructure.Preprocessing import train_test_split, modify, save_configuration
+from infrastructure.Preprocessing import train_test_split, modify
+from infrastructure.PreprocessingConfiguration import save_configuration, get_configurations
 
 api = Namespace('preprocessing')
 
@@ -85,7 +86,7 @@ class Modify(Resource):
 
         if 'newDatasetName' in api.payload and api.payload['newDatasetName']:
             dataset_name = api.payload['newDatasetName']
-            modify(columns, df)
+            modify(df, columns)
             save_dataset(df, dataset_name)
 
         if 'configurationName' in api.payload and api.payload['configurationName']:
@@ -93,3 +94,9 @@ class Modify(Resource):
             save_configuration(columns, configuration_name)
 
         return None, 200
+
+
+@api.route('/configurations')
+class Configurations(Resource):
+    def get(self):
+        return list(get_configurations())

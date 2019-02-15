@@ -2,6 +2,8 @@ from flask_restplus import Namespace, Resource
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 from infrastructure.StatisticsCache import store, try_load
+from infrastructure.Preprocessing import modify
+from infrastructure.PreprocessingConfiguration import load_configuration
 import numpy as np
 
 api = Namespace('dataset')
@@ -31,13 +33,18 @@ class DatasetRows(Resource):
 
 
 @api.route('/statistics/<string:dataset>')
+@api.route('/statistics/<string:dataset>/<string:configuration>')
 class DatasetStatistics(Resource):
-    def get(self, dataset):
-        result = try_load(dataset)
+    def get(self, dataset, configuration=None):
+        result = try_load(dataset, configuration)
         if result:
             return result
 
         df = get_dataset(dataset)
+        if configuration:
+            loaded_configuration = load_configuration(configuration)
+            modify(df, loaded_configuration)
+
         columns = []
         for column_name in df:
             series = df[column_name]
@@ -76,6 +83,6 @@ class DatasetStatistics(Resource):
         result = {
             "columns": columns
         }
-        store(dataset, result)
+        store(dataset, configuration, result)
 
         return result

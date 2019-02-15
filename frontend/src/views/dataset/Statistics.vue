@@ -16,7 +16,23 @@
             editable
             class="pt-0 mt-0"
             :loading="loadingDatasets"
+            hide-details
           />
+        </v-flex>
+        <v-flex xs12 v-if="dataset">
+          <v-subheader class="pa-0">Configuration</v-subheader>
+          <v-layout>
+            <v-checkbox v-model="useConfiguration" hide-details class="shrink"/>
+            <v-overflow-btn
+              v-model="configuration"
+              :items="configurations"
+              :disabled="!useConfiguration"
+              label="Select configuration"
+              editable
+              class="pt-0 mt-0"
+              :loading="loadingConfigurations"
+            />
+          </v-layout>
         </v-flex>
         <v-flex xs12>
           <v-progress-linear v-if="loadingDatasetDetails" indeterminate/>
@@ -27,7 +43,7 @@
           >Server error.</v-alert>
         </v-flex>
 
-        <v-container fluid grid-list-md>
+        <v-container fluid grid-list-md class="pa-0">
           <v-data-iterator
             :items="columns"
             content-tag="v-layout"
@@ -110,7 +126,7 @@
                 </v-list>
 
                 <v-divider/>
-                
+
                 <v-img
                   v-if="props.item.histogramType === 'base64'"
                   :src="'data:image/jpeg;base64,' + props.item.histogram"
@@ -132,33 +148,62 @@ export default {
       loadingDatasets: false,
       dataset: undefined,
 
+      configurations: [],
+      useConfiguration: false,
+      loadingConfigurations: false,
+      configuration: undefined,
+
       loadingDatasetDetails: false,
       datasetDetailsError: false,
       columns: []
     };
   },
   async created() {
-    this.loadingDatasets = true;
-    const response = await this.$http.get("/api/v1/datasets");
-    this.datasets = response.data.map(t => t.name);
-    this.loadingDatasets = false;
+    await Promise.all([this.loadDatasets(), this.loadConfigurations()])
   },
-  methods: {},
-  watch: {
-    dataset: async function() {
+  methods: {
+    async loadDatasets() {
+      this.loadingDatasets = true;
+      const response = await this.$http.get("/api/v1/datasets");
+      this.datasets = response.data.map(t => t.name);
+      this.loadingDatasets = false;
+    },
+    async loadConfigurations() {
+      this.loadingConfigurations = true;
+      const response = await this.$http.get(
+        "/api/v1/preprocessing/configurations"
+      );
+      this.configurations = response.data;
+      this.loadingConfigurations = false;
+    },
+    async loadView() {
       try {
         this.loadingDatasetDetails = true;
         this.datasetDetailsError = false;
-        const response = await this.$http.get(
-          `/api/v1/dataset/statistics/${this.dataset}`
-        );
+        let url = `/api/v1/dataset/statistics/${this.dataset}`;
+        if (this.useConfiguration && this.configuration)
+          url += `/${this.configuration}`;
+        const response = await this.$http.get(url);
         this.columns = response.data.columns;
       } catch {
         this.datasetDetailsError = true;
-        this.columns = []
+        this.columns = [];
       } finally {
         this.loadingDatasetDetails = false;
       }
+    }
+  },
+  watch: {
+    dataset: async function() {
+      await this.loadView();
+    },
+    useConfiguration: async function() {
+      if (this.configuration && this.configuration.length > 0)
+        await this.loadView();
+    },
+    configuration: async function() {
+      if (this.configuration && this.configuration.length > 0)
+        await this.loadView();
     }
   }
 };
