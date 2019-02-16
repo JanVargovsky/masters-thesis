@@ -360,6 +360,7 @@ yarn-error.log*
 *.sw*
 
 # Backend
+venv/
 data/
 
 # Frontend
