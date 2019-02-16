@@ -4,7 +4,7 @@ from infrastructure import statistics_cache_path
 
 
 def _get_filename(dataset, configuration):
-    filename = f"{statistics_cache_path}{dataset}"
+    filename = statistics_cache_path + dataset
     if configuration:
         filename += configuration
     return filename + ".json"

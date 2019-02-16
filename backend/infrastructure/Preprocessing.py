@@ -25,12 +25,12 @@ def modify(df, columns):
                 elif na_method == 'custom':
                     na_value = column['naCustomValue']
                 else:
-                    raise Exception(f"Column '{name}' invalid na method")
+                    raise Exception("Column '{}' invalid na method".format(name))
                 df[name].fillna(na_value, inplace=True)
             if column['normalize']:
                 normalize_min, normalize_max = column['normalizeRange']['min'], column['normalizeRange']['max']
                 if normalize_min >= normalize_max:
-                    raise Exception(f"Column '{name}' has invalid normalize range {normalize_min} < {normalize_max}")
+                    raise Exception("Column '{}' has invalid normalize range {} < {}".format(name, normalize_min, normalize_max))
                 scaler = MinMaxScaler(feature_range=(normalize_min, normalize_max))
                 df[name] = scaler.fit_transform(df[[name]])
             if column['encode']:
@@ -42,4 +42,4 @@ def modify(df, columns):
                     df.drop(name, axis=1, inplace=True)
                     df[dummies.columns] = dummies
                 else:
-                    raise Exception(f"Column '{name}' has invalid encode method")
+                    raise Exception("Column '{}' has invalid encode method".format(name))

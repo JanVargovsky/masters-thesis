@@ -6,7 +6,7 @@ from infrastructure import preprocessing_configuration_path
 
 
 def _get_filename(name):
-    return f"{preprocessing_configuration_path}{name}.json"
+    return preprocessing_configuration_path + name + ".json"
 
 
 def save_configuration(data, name):

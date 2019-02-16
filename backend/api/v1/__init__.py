@@ -11,5 +11,5 @@ for _, modname, _ in iter_modules(path=__path__, prefix=__name__ + '.'):
     module = import_module(modname)
     namespace = getattr(module, 'api', None)
     if namespace:
-        print(f"adding namespace {namespace.name}")
+        print("adding namespace {}".format(namespace.name))
         api.add_namespace(namespace)

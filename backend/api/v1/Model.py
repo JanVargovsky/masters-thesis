@@ -71,7 +71,7 @@ class ClassificationSimple(Resource):
         # test
         test_loss, test_acc = model.evaluate(test_x, test_y)
 
-        keras.models.save_model(model, f'data/models/{experiment_name}.h5py')
+        keras.models.save_model(model, 'data/models/{}.h5py'.format(experiment_name))
 
         return {
             'testLoss': test_loss,
