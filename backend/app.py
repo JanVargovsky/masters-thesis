@@ -4,7 +4,7 @@ from flask_cors import CORS
 
 from api.v1 import api_v1
 
-app = Flask(__name__, static_url_path='', static_folder='../frontend/dist')
+app = Flask(__name__, static_url_path='', static_folder='frontend')
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 app.register_blueprint(api_v1, url_prefix='/api/v1')
 app.config.SWAGGER_UI_DOC_EXPANSION = 'list'
@@ -25,4 +25,4 @@ def default():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host='0.0.0.0')
