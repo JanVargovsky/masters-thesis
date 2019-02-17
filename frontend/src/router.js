@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 import About from "./views/About.vue";
 import Datasets from "./views/Datasets.vue";
 import Dataset from "./views/Dataset.vue";
+import DatasetUpload from "./views/dataset/Upload.vue";
 import Preprocessing from "./views/Preprocessing.vue";
 import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
@@ -27,6 +28,10 @@ export default new Router({
     {
       path: "/datasets",
       component: Datasets
+    },
+    {
+      path: "/dataset/upload",
+      component: DatasetUpload
     },
     {
       path: "/dataset/:dataset",
