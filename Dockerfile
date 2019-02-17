@@ -2,7 +2,7 @@ FROM tensorflow/tensorflow:1.12.0-py3
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends && \
-    pip install --upgrade pip setuptools openpyxl
+    pip install --upgrade pip setuptools openpyxl gunicorn
 
 WORKDIR /app
 
@@ -12,6 +12,4 @@ COPY backend .
 
 RUN pip install -r requirements.txt
 
-ENTRYPOINT [ "python" ]
-
-CMD [ "app.py" ]
+CMD [ "gunicorn", "-w", "4", "-b", ":5000", "app:app" ]
