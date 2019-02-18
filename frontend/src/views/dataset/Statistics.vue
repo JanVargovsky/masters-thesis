@@ -159,7 +159,7 @@ export default {
     };
   },
   async created() {
-    await Promise.all([this.loadDatasets(), this.loadConfigurations()])
+    await this.loadDatasets();
   },
   methods: {
     async loadDatasets() {
@@ -171,7 +171,7 @@ export default {
     async loadConfigurations() {
       this.loadingConfigurations = true;
       const response = await this.$http.get(
-        "/api/v1/preprocessing/configurations"
+        `/api/v1/dataset/configurations/${this.dataset}`
       );
       this.configurations = response.data;
       this.loadingConfigurations = false;
@@ -195,6 +195,8 @@ export default {
   },
   watch: {
     dataset: async function() {
+      this.configuration = undefined;
+      await this.loadConfigurations();
       await this.loadView();
     },
     useConfiguration: async function() {

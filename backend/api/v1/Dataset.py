@@ -4,7 +4,7 @@ from flask_restplus import Namespace, Resource
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 from infrastructure.Preprocessing import modify
-from infrastructure.PreprocessingConfiguration import load_configuration
+from infrastructure.PreprocessingConfiguration import load_configuration, get_configurations
 from infrastructure.StatisticsCache import store, try_load
 
 api = Namespace('dataset')
@@ -57,7 +57,7 @@ class DatasetStatistics(Resource):
 
         df = get_dataset(dataset)
         if configuration:
-            loaded_configuration = load_configuration(configuration)
+            loaded_configuration = load_configuration(dataset, configuration)
             modify(df, loaded_configuration)
 
         columns = []
@@ -101,3 +101,9 @@ class DatasetStatistics(Resource):
         store(dataset, configuration, result)
 
         return result
+
+
+@api.route('/configurations/<string:dataset>')
+class DatasetConfigurations(Resource):
+    def get(self, dataset):
+        return list(get_configurations(dataset))
