@@ -55,6 +55,11 @@ export default {
           icon: "mdi-database",
           items: [
             {
+              title: "Upload",
+              icon: "mdi-database-plus",
+              link: "/dataset/upload"
+            },
+            {
               title: "List",
               icon: "mdi-view-list",
               link: "/datasets"

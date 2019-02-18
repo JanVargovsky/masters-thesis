@@ -1,6 +1,8 @@
 import numpy as np
+from flask import request
 from flask_restplus import Namespace, Resource
 
+from infrastructure import datasets_path
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 from infrastructure.Preprocessing import modify
@@ -31,6 +33,11 @@ class Dataset(DatasetBase):
     def delete(self, dataset):
         delete_dataset(dataset)
         return None, 204
+
+    def post(self, dataset):
+        file = request.files['dataset']
+        file.save(datasets_path + dataset)
+        return None, 201
 
 
 @api.route('/<string:dataset>/<int:rows>')
