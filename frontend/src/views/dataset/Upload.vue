@@ -13,6 +13,7 @@
               v-model="dataset"
               prepend-icon="mdi-database"
               clearable
+              @click:clear="reset"
             />
             <input type="file" hidden ref="dataset" accept=".csv, .xlsx, .xlsm" @change="onChange">
           </v-flex>
@@ -63,13 +64,22 @@ export default {
         this.done = false;
         this.loading = true;
 
-        // TODO: upload
-
+        let formData = new FormData();
+        formData.append("dataset", this.datasetFile);
+        await this.$http.post(`api/v1/dataset/${this.dataset}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data"
+          }
+        });
         this.done = true;
       } catch (error) {
         this.error = true;
       }
       this.loading = false;
+    },
+    reset() {
+      this.done = false;
+      this.error = false;
     }
   }
 };
