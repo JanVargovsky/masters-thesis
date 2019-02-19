@@ -202,7 +202,7 @@ export default {
       try {
         this.submitLoading = true;
         this.submitError = false;
-        await this.$http.post("api/v1/model/classification/simple", {
+        await this.$http.post("/api/v1/model/classification/simple", {
           name: this.modelName,
           trainingDataset: this.trainingDataset,
           testingDataset: this.testingDataset,

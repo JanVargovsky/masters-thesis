@@ -66,7 +66,7 @@ export default {
 
         let formData = new FormData();
         formData.append("dataset", this.datasetFile);
-        await this.$http.post(`api/v1/dataset/${this.dataset}`, formData, {
+        await this.$http.post(`/api/v1/dataset/${this.dataset}`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }

@@ -92,8 +92,7 @@ export default {
         this.done = false;
         this.submitLoading = true;
         this.submitError = false;
-        await this.$http.put("api/v1/preprocessing/split", {
-          dataset: this.dataset,
+        await this.$http.put(`/api/v1/preprocessing/dataset/${this.dataset}/split`, {
           ratio: this.ratio / Units,
           shuffle: true,
           trainDataset: this.trainDatasetName,
@@ -123,7 +122,7 @@ export default {
   watch: {
     dataset: async function() {
       const response = await this.$http.get(
-        `/api/v1/dataset/rows/${this.dataset}`
+        `/api/v1/dataset/${this.dataset}/rows`
       );
       this.rows = response.data.rows;
 

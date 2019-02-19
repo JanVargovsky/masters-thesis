@@ -171,7 +171,7 @@ export default {
     async loadConfigurations() {
       this.loadingConfigurations = true;
       const response = await this.$http.get(
-        `/api/v1/dataset/configurations/${this.dataset}`
+        `/api/v1/dataset/${this.dataset}/configurations`
       );
       this.configurations = response.data;
       this.loadingConfigurations = false;
@@ -180,7 +180,7 @@ export default {
       try {
         this.loadingDatasetDetails = true;
         this.datasetDetailsError = false;
-        let url = `/api/v1/dataset/statistics/${this.dataset}`;
+        let url = `/api/v1/dataset/${this.dataset}/statistics`;
         if (this.useConfiguration && this.configuration)
           url += `/${this.configuration}`;
         const response = await this.$http.get(url);

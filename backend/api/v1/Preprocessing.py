@@ -7,7 +7,6 @@ from infrastructure.PreprocessingConfiguration import save_configuration
 api = Namespace('preprocessing')
 
 dataset_split = api.model('PreprocessingDatasetSplit', {
-    'dataset': fields.String(required=True, description='Dataset name'),
     'ratio': fields.Float(required=True, description='Split ratio', min=0.001, max=0.999),
     'shuffle': fields.Boolean(default=True, description='Shuffle dataset'),
     'trainDataset': fields.String(required=True, description='Train dataset name'),
@@ -15,18 +14,17 @@ dataset_split = api.model('PreprocessingDatasetSplit', {
 })
 
 
-@api.route('/split')
-class Split(Resource):
+@api.route('/dataset/<string:dataset>/split')
+class DatasetSplit(Resource):
     @api.expect(dataset_split, validate=True)
-    def put(self):
-        dataset_name = api.payload['dataset']
+    def put(self, dataset):
         ratio = api.payload['ratio']
         shuffle = api.payload['shuffle']
         train_dataset_name = api.payload['trainDataset']
         test_dataset_name = api.payload['testDataset']
 
-        dataset = get_dataset(dataset_name)
-        train, test = train_test_split(dataset, ratio, shuffle)
+        df = get_dataset(dataset)
+        train, test = train_test_split(df, ratio, shuffle)
 
         save_dataset(train, train_dataset_name)
         save_dataset(test, test_dataset_name)
@@ -63,8 +61,8 @@ dataset_modify = api.model('PreprocessingDatasetModify', {
 })
 
 
-@api.route('/modify/<string:dataset>')
-class Modify(Resource):
+@api.route('/dataset/<string:dataset>/modify')
+class DatasetModify(Resource):
     def get(self, dataset):
         df = get_dataset(dataset)
         columns = []

@@ -46,7 +46,7 @@ class DatasetWithLimitedRows(DatasetBase):
         return super().get(dataset, rows)
 
 
-@api.route('/rows/<string:dataset>')
+@api.route('/<string:dataset>/rows')
 class DatasetRows(Resource):
     def get(self, dataset):
         return {
@@ -54,8 +54,8 @@ class DatasetRows(Resource):
         }
 
 
-@api.route('/statistics/<string:dataset>')
-@api.route('/statistics/<string:dataset>/<string:configuration>')
+@api.route('/<string:dataset>/statistics')
+@api.route('/<string:dataset>/statistics/<string:configuration>')
 class DatasetStatistics(Resource):
     def get(self, dataset, configuration=None):
         result = try_load(dataset, configuration)
@@ -110,7 +110,7 @@ class DatasetStatistics(Resource):
         return result
 
 
-@api.route('/configurations/<string:dataset>')
+@api.route('/<string:dataset>/configurations')
 class DatasetConfigurations(Resource):
     def get(self, dataset):
         return list(get_configurations(dataset))

@@ -209,7 +209,7 @@ export default {
           payload.configurationName = this.configurationName;
 
         await this.$http.put(
-          `api/v1/preprocessing/modify/${this.dataset}`,
+          `/api/v1/preprocessing/dataset/${this.dataset}/modify`,
           payload
         );
 
@@ -227,7 +227,7 @@ export default {
   watch: {
     dataset: async function() {
       const response = await this.$http.get(
-        `/api/v1/preprocessing/modify/${this.dataset}`
+        `/api/v1/preprocessing/dataset/${this.dataset}/modify`
       );
       this.columns = response.data.columns.map(column => ({
         name: column.name,
