@@ -29,7 +29,7 @@
         <td>{{ props.item.lastModifiedAt.toLocaleString() }}</td>
         <td class="shrink">
           <v-tooltip top>
-            <v-btn slot="activator" fab icon small class="ma-0" :to="'/dataset/'+props.item.name">
+            <v-btn slot="activator" fab icon small class="ma-0" :to="'/datasets/'+props.item.name">
               <v-icon>mdi-file-find</v-icon>
             </v-btn>
             <span>Open</span>

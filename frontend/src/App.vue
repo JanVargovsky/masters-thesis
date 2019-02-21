@@ -57,12 +57,12 @@ export default {
             {
               title: "Upload",
               icon: "mdi-database-plus",
-              link: "/dataset/upload"
+              link: "/datasets/upload"
             },
             {
               title: "List",
               icon: "mdi-view-list",
-              link: "/datasets"
+              link: "/datasets/list"
             },
             {
               title: "Preprocessing",
@@ -78,16 +78,16 @@ export default {
         },
         {
           title: "Models",
-          icon: "mdi-cube-outline",
+          icon: "mdi-cube",
           items: [
             {
               title: "Create simple",
-              icon: "mdi-cube",
+              icon: "mdi-cube-outline",
               link: "/models/create-simple"
             },
             {
               title: "Create",
-              icon: "mdi-cube",
+              icon: "mdi-cube-outline",
               link: "/models/create"
             },
             { title: "List", icon: "mdi-view-list", link: "/models/list" }

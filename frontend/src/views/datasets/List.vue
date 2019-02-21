@@ -3,7 +3,7 @@
 </template>
 
 <script>
-import DatasetsTable from "../components/DatasetsTable";
+import DatasetsTable from "../../components/DatasetsTable";
 
 export default {
   components: {

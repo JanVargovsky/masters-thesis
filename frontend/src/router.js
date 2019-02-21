@@ -3,13 +3,16 @@ import Router from "vue-router";
 import NotFound from "./views/404.vue";
 import Home from "./views/Home.vue";
 import About from "./views/About.vue";
-import Datasets from "./views/Datasets.vue";
-import Dataset from "./views/Dataset.vue";
-import DatasetUpload from "./views/dataset/Upload.vue";
+
+import DatasetUpload from "./views/datasets/Upload.vue";
+import DatasetList from "./views/datasets/List.vue";
+import DatasetDetail from "./views/datasets/Detail.vue";
+import Statistics from "./views/datasets/Statistics.vue";
+
 import Preprocessing from "./views/Preprocessing.vue";
 import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
-import Statistics from "./views/dataset/Statistics.vue";
+
 import CreateModelSimple from "./views/CreateModelSimple.vue";
 import CreateModel from "./views/models/Create.vue";
 import Models from "./views/Models.vue";
@@ -27,16 +30,16 @@ export default new Router({
       component: About
     },
     {
-      path: "/datasets",
-      component: Datasets
+      path: "/datasets/list",
+      component: DatasetList
     },
     {
-      path: "/dataset/upload",
+      path: "/datasets/upload",
       component: DatasetUpload
     },
     {
-      path: "/dataset/:dataset",
-      component: Dataset,
+      path: "/datasets/:dataset",
+      component: DatasetDetail,
       props: true
     },
     {
