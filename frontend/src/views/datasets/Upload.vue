@@ -14,6 +14,8 @@
               prepend-icon="mdi-database"
               clearable
               @click:clear="reset"
+              hint="CSV or Excel file"
+              persistent-hint
             />
             <input type="file" hidden ref="dataset" accept=".csv, .xlsx, .xlsm" @change="onChange">
           </v-flex>
