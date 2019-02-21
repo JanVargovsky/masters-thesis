@@ -81,11 +81,16 @@ export default {
           icon: "mdi-cube-outline",
           items: [
             {
+              title: "Create simple",
+              icon: "mdi-cube",
+              link: "/models/create-simple"
+            },
+            {
               title: "Create",
               icon: "mdi-cube",
-              link: "/create-model"
+              link: "/models/create"
             },
-            { title: "List", icon: "mdi-view-list", link: "/models" }
+            { title: "List", icon: "mdi-view-list", link: "/models/list" }
           ]
         },
         // { title: "Experiments", icon: "mdi-view-list", link: "/experiments" },
