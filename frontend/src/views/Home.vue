@@ -35,7 +35,7 @@ export default {
     return {
       items: [
         {
-          title: "Data",
+          title: "Dataset",
           description: "We need a data to operate on. Upload a new dataset with your data.",
           color: "indigo",
           icon: "mdi-database-plus",

@@ -10,7 +10,7 @@
         single-line
         hide-details
         clearable
-        prepend-icon="mdi-magnify"
+        prepend-icon="mdi-database-search"
       />
     </v-flex>
     <v-flex xs12>

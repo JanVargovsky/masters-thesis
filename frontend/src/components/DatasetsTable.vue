@@ -8,7 +8,7 @@
           single-line
           hide-details
           clearable
-          prepend-icon="mdi-magnify"
+          prepend-icon="mdi-database-search"
         />
         <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading">Refresh</v-btn>
       </v-layout>
