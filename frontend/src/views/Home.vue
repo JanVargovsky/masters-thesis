@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
-      <v-timeline align-top>
+      <v-timeline align-top class="pt-0">
         <v-timeline-item
           v-for="(item, i) in items"
           :key="i"
