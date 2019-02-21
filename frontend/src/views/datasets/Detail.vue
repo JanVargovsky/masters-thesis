@@ -1,5 +1,12 @@
 <template>
-  <dataset-table :dataset="dataset"/>
+  <v-card>
+    <v-toolbar color="indigo" dark flat dense card>
+      <v-toolbar-title class="subheading">Dataset - {{ dataset }}</v-toolbar-title>
+    </v-toolbar>
+    <v-card-text>
+      <dataset-table :dataset="dataset"/>
+    </v-card-text>
+  </v-card>
 </template>
 
 <script>

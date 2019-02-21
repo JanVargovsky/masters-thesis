@@ -1,44 +1,51 @@
 <template>
-  <v-card>
-    <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
-    <v-card-title>
-      <v-icon large>mdi-database</v-icon>
-      {{ dataset }}
-      <v-spacer/>
-      <v-text-field v-model="search" label="Search" single-line hide-details clearable/>
-    </v-card-title>
+  <v-layout row wrap>
+    <v-flex xs12>
+      <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+    </v-flex>
+    <v-flex xs12>
+      <v-text-field
+        v-model="search"
+        label="Search"
+        single-line
+        hide-details
+        clearable
+        prepend-icon="mdi-magnify"
+      />
+    </v-flex>
+    <v-flex xs12>
+      <v-data-table
+        :headers="headers"
+        :items="rows"
+        :search="search"
+        :loading="loading"
+        :rows-per-page-items="[10, 25, 50, 100]"
+      >
+        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
-    <v-data-table
-      :headers="headers"
-      :items="rows"
-      :search="search"
-      :loading="loading"
-      :rows-per-page-items="[10, 25, 50, 100]"
-    >
-      <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+        <template slot="items" slot-scope="props">
+          <tr :class="{'red lighten-5': props.item.hasNA}">
+            <td class="shrink">{{ props.item.id }}</td>
+            <td
+              v-for="(item, index) in props.item.values"
+              :key="String(props.item.id) + String(index) + String(item)"
+              :class="{'red': item === NA }"
+            >
+              <v-tooltip top v-if="item === NA">
+                <span slot="activator">{{ item }}</span>
+                <span>Missing value</span>
+              </v-tooltip>
+              <span v-else>{{ item }}</span>
+            </td>
+          </tr>
+        </template>
 
-      <template slot="items" slot-scope="props">
-        <tr :class="{'red lighten-5': props.item.hasNA}">
-          <td class="shrink">{{ props.item.id }}</td>
-          <td
-            v-for="(item, index) in props.item.values"
-            :key="String(props.item.id) + String(index) + String(item)"
-            :class="{'red': item === NA }"
-          >
-            <v-tooltip top v-if="item === NA">
-              <span slot="activator">{{ item }}</span>
-              <span>Missing value</span>
-            </v-tooltip>
-            <span v-else>{{ item }}</span>
-          </td>
-        </tr>
-      </template>
-
-      <template slot="no-data">
-        <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
-      </template>
-    </v-data-table>
-  </v-card>
+        <template slot="no-data">
+          <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
+        </template>
+      </v-data-table>
+    </v-flex>
+  </v-layout>
 </template>
  
 <script>
@@ -88,7 +95,9 @@ export default {
       try {
         this.loading = true;
         this.data = [];
-        const response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
+        const response = await this.$http.get(
+          `/api/v1/dataset/${this.dataset}`
+        );
         const data = response.data;
         this.columns = data.columns;
         this.rows = data.rows.map((row, index) => ({

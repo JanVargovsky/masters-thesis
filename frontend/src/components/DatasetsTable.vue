@@ -1,66 +1,82 @@
 <template>
-  <v-card>
-    <v-card-title>
-      <v-icon large>mdi-database</v-icon>Datasets
-      <v-spacer/>
-      <v-text-field v-model="search" label="Search" single-line hide-details clearable/>
-      <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading">Refresh</v-btn>
-    </v-card-title>
-    <v-data-table
-      :headers="headers"
-      :items="datasets"
-      :search="search"
-      :loading="loading"
-      :pagination.sync="pagination"
-      :rows-per-page-items="[10, 25, 50, 100]"
-    >
-      <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+  <v-layout row wrap>
+    <v-flex xs12>
+      <v-layout row wrap>
+        <v-text-field
+          v-model="search"
+          label="Search"
+          single-line
+          hide-details
+          clearable
+          prepend-icon="mdi-magnify"
+        />
+        <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading">Refresh</v-btn>
+      </v-layout>
+    </v-flex>
+    <v-flex xs12>
+      <v-data-table
+        :headers="headers"
+        :items="datasets"
+        :search="search"
+        :loading="loading"
+        :pagination.sync="pagination"
+        :rows-per-page-items="[10, 25, 50, 100]"
+      >
+        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
 
-      <template slot="items" slot-scope="props">
-        <td class="shrink">
-          <v-tooltip top>
-            <v-icon slot="activator">{{props.item.type | typeToIcon}}</v-icon>
-            <span>{{props.item.type}}</span>
-          </v-tooltip>
-        </td>
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.size | formatSize }}</td>
-        <td>{{ props.item.createdAt.toLocaleString() }}</td>
-        <td>{{ props.item.lastModifiedAt.toLocaleString() }}</td>
-        <td class="shrink">
-          <v-tooltip top>
-            <v-btn slot="activator" fab icon small class="ma-0" :to="'/datasets/'+props.item.name">
-              <v-icon>mdi-file-find</v-icon>
-            </v-btn>
-            <span>Open</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <v-btn slot="activator" fab icon small class="ma-0">
-              <v-icon>mdi-pencil</v-icon>
-            </v-btn>
-            <span>Edit</span>
-          </v-tooltip>
-          <v-tooltip top>
-            <v-btn
-              slot="activator"
-              fab
-              icon
-              small
-              class="ma-0"
-              @click="deleteDataset(props.item.name)"
-            >
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-            <span>Delete</span>
-          </v-tooltip>
-        </td>
-      </template>
+        <template slot="items" slot-scope="props">
+          <td class="shrink">
+            <v-tooltip top>
+              <v-icon slot="activator">{{props.item.type | typeToIcon}}</v-icon>
+              <span>{{props.item.type}}</span>
+            </v-tooltip>
+          </td>
+          <td>{{ props.item.name }}</td>
+          <td>{{ props.item.size | formatSize }}</td>
+          <td>{{ props.item.createdAt.toLocaleString() }}</td>
+          <td>{{ props.item.lastModifiedAt.toLocaleString() }}</td>
+          <td class="shrink">
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                fab
+                icon
+                small
+                class="ma-0"
+                :to="'/datasets/'+props.item.name"
+              >
+                <v-icon>mdi-file-find</v-icon>
+              </v-btn>
+              <span>Open</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <v-btn slot="activator" fab icon small class="ma-0">
+                <v-icon>mdi-pencil</v-icon>
+              </v-btn>
+              <span>Edit</span>
+            </v-tooltip>
+            <v-tooltip top>
+              <v-btn
+                slot="activator"
+                fab
+                icon
+                small
+                class="ma-0"
+                @click="deleteDataset(props.item.name)"
+              >
+                <v-icon>mdi-delete</v-icon>
+              </v-btn>
+              <span>Delete</span>
+            </v-tooltip>
+          </td>
+        </template>
 
-      <template slot="no-data">
-        <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
-      </template>
-    </v-data-table>
-  </v-card>
+        <template slot="no-data">
+          <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
+        </template>
+      </v-data-table>
+    </v-flex>
+  </v-layout>
 </template>
 
 <script>
