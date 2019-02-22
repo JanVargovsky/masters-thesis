@@ -20,12 +20,38 @@
                   class="pt-0 mt-0"
                 />
               </v-flex>
+              <v-flex xs12 v-if="dataset">
+                <v-badge v-if="canRemoveTotalCount > 0" color="red" overlap>
+                  <span slot="badge">{{ removedCount }}/{{ canRemoveTotalCount }}</span>
+                  <v-btn @click="removeAll" :flat="!removedAll" color="red" dark>Remove</v-btn>
+                </v-badge>
+
+                <v-badge v-if="canNormalizeTotalCount > 0" color="orange" overlap>
+                  <span slot="badge">{{ normalizedCount }}/{{ canNormalizeTotalCount }}</span>
+                  <v-btn @click="normalizeAll" :flat="!normalizedAll" color="orange" dark>Normalize</v-btn>
+                </v-badge>
+
+                <v-badge v-if="canFixMissingValueTotalCount > 0" color="green" overlap>
+                  <span slot="badge">{{ fixedMissingValueCount }}/{{ canFixMissingValueTotalCount }}</span>
+                  <v-btn
+                    @click="missingValuesFixAll"
+                    :flat="!missingValuesFixedAll"
+                    color="green"
+                    dark
+                  >Fix missing values</v-btn>
+                </v-badge>
+
+                <v-badge v-if="canEncodeTotalCount > 0" color="blue" overlap>
+                  <span slot="badge">{{ encodedCount }}/{{ canEncodeTotalCount }}</span>
+                  <v-btn @click="encodeAll" :flat="!encodedAll" color="blue" dark>Encode</v-btn>
+                </v-badge>
+              </v-flex>
               <v-flex xs12 row v-for="(column) in columns" :key="column.name">
                 <v-subheader class="pa-0">{{ column.name }} ({{ column.type }})</v-subheader>
                 <!-- Remove -->
                 <v-switch v-model="column.remove" label="Remove" color="red"/>
                 <!-- Normalize -->
-                <v-layout row v-if="!column.remove && isNumber(column)">
+                <v-layout row v-if="canNormalize(column)">
                   <v-flex shrink>
                     <v-switch v-model="column.normalize" label="Normalize" color="orange"/>
                   </v-flex>
@@ -49,7 +75,7 @@
                   </v-flex>
                 </v-layout>
                 <!-- Missing values -->
-                <v-layout row v-if="!column.remove && column.hasNA">
+                <v-layout row v-if="canFixNA(column)">
                   <v-flex shrink>
                     <v-switch v-model="column.na" label="Fix missing values" color="green"/>
                   </v-flex>
@@ -78,7 +104,7 @@
                   </v-flex>
                 </v-layout>
                 <!-- Categorical -->
-                <v-layout row v-if="!column.remove && isCategorical(column)">
+                <v-layout row v-if="canEncode(column)">
                   <v-flex shrink>
                     <v-switch v-model="column.encode" label="Encode" color="blue"/>
                   </v-flex>
@@ -161,6 +187,11 @@ export default {
 
       columns: [],
 
+      removedAll: false,
+      normalizedAll: false,
+      missingValuesFixedAll: false,
+      encodedAll: false,
+
       useNewDatasetName: false,
       newDatasetName: undefined,
       useConfigurationName: false,
@@ -182,6 +213,48 @@ export default {
     isCategorical(column) {
       return column.type === "object";
     },
+
+    canNormalize(column) {
+      return !column.remove && this.isNumber(column);
+    },
+    canFixNA(column) {
+      return !column.remove && column.hasNA;
+    },
+    canEncode(column) {
+      return !column.remove && this.isCategorical(column);
+    },
+
+    removeAll() {
+      this.removedAll = !this.removedAll;
+      this.columns.forEach(column => {
+        column.remove = this.removedAll;
+      });
+    },
+    normalizeAll() {
+      this.normalizedAll = !this.normalizedAll;
+      this.columns.forEach(column => {
+        if (this.canNormalize(column)) {
+          column.normalize = this.normalizedAll;
+        }
+      });
+    },
+    missingValuesFixAll() {
+      this.missingValuesFixedAll = !this.missingValuesFixedAll;
+      this.columns.forEach(column => {
+        if (this.canFixNA(column)) {
+          column.na = this.missingValuesFixedAll;
+        }
+      });
+    },
+    encodeAll() {
+      this.encodedAll = !this.encodedAll;
+      this.columns.forEach(column => {
+        if (this.canEncode(column)) {
+          column.encode = this.encodedAll;
+        }
+      });
+    },
+
     async submit() {
       try {
         this.done = false;
@@ -285,7 +358,44 @@ export default {
       if (this.useConfigurationName && this.configurationName.length === 0)
         return true;
       return false;
+    },
+
+    canRemoveTotalCount() {
+      return this.columns.length;
+    },
+    removedCount() {
+      return this.columns.filter(c => c.remove).length;
+    },
+
+    canNormalizeTotalCount() {
+      return this.columns.filter(this.canNormalize).length;
+    },
+    normalizedCount() {
+      return this.columns.filter(c => this.canNormalize(c) && c.normalize)
+        .length;
+    },
+
+    canFixMissingValueTotalCount() {
+      return this.columns.filter(this.canFixNA).length;
+    },
+    fixedMissingValueCount() {
+      return this.columns.filter(c => this.canFixNA(c) && c.na).length;
+    },
+
+    canEncodeTotalCount() {
+      return this.columns.filter(this.canEncode).length;
+    },
+    encodedCount() {
+      return this.columns.filter(c => this.canEncode(c) && c.encode).length;
     }
   }
 };
 </script>
+
+<style>
+.v-badge__badge {
+  width: auto;
+  border-radius: 12px;
+  padding: 0px 5px;
+}
+</style>
