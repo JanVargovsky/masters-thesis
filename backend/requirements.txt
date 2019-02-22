@@ -3,6 +3,7 @@ aniso8601==4.1.0
 astor==0.7.1
 Click==7.0
 cycler==0.10.0
+et-xmlfile==1.0.1
 Flask==1.0.2
 Flask-Cors==3.0.7
 flask-restplus==0.12.1
@@ -10,6 +11,7 @@ gast==0.2.2
 grpcio==1.18.0
 h5py==2.9.0
 itsdangerous==1.1.0
+jdcal==1.4
 Jinja2==2.10
 jsonschema==2.6.0
 Keras-Applications==1.0.7
@@ -19,6 +21,7 @@ Markdown==3.0.1
 MarkupSafe==1.1.0
 matplotlib==3.0.2
 numpy==1.16.1
+openpyxl==2.6.0
 pandas==0.24.1
 protobuf==3.6.1
 pyparsing==2.3.1
