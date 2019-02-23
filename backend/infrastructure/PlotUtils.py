@@ -24,3 +24,23 @@ def plot_histogram(series, column_name, is_numeric):
         value_counts = series.value_counts(dropna=False)
         for value, count in value_counts.iteritems():
             plt.bar(str(value), count)
+
+
+def plot_history_accuracy(history):
+    plt.plot(history.history['acc'], label="Train")
+    if "val_acc" in history.history:
+        plt.plot(history.history['val_acc'], label="Validation")
+    plt.title('Model accuracy')
+    plt.ylabel('Accuracy')
+    plt.xlabel('Epoch')
+    plt.legend()
+
+
+def plot_history_loss(history):
+    plt.plot(history.history['loss'], label="Train")
+    if "val_loss" in history.history:
+        plt.plot(history.history['val_loss'], label="Validation")
+    plt.title('Model loss')
+    plt.ylabel('Loss')
+    plt.xlabel('Epoch')
+    plt.legend()
