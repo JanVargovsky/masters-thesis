@@ -146,7 +146,7 @@ export default {
     async deleteDataset(dataset) {
       if (confirm(`Are you sure you want to delete ${name}?`)) {
         try {
-          const response = await this.$http.delete(
+          await this.$http.delete(
             `/api/v1/dataset/${dataset}`
           );
           this.datasets = this.datasets.filter(t => t.name !== dataset);
