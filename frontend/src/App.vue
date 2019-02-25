@@ -32,6 +32,10 @@
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <v-icon class="ml-3">mdi-database-search</v-icon>
       <v-toolbar-title>Dataset Analyser</v-toolbar-title>
+
+      <v-spacer></v-spacer>
+
+      <settings-modal/>
     </v-toolbar>
 
     <v-content>
@@ -43,8 +47,13 @@
 </template>
 
 <script>
+import SettingsModal from "./views/settings/SettingsModal";
+
 export default {
   name: "App",
+  components: {
+    SettingsModal
+  },
   data() {
     return {
       drawer: true,

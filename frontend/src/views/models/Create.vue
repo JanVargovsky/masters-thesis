@@ -14,7 +14,6 @@
               label="Select dataset"
               editable
               class="pt-0 mt-0"
-              :loading="loadingDatasets"
               hide-details
             />
           </v-flex>
@@ -52,6 +51,9 @@
             </v-layout>
           </v-flex>
           <v-flex xs12>
+            <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+          </v-flex>
+          <v-flex xs12>
             <v-layout row>
               <v-flex xs6>
                 <v-img v-if="accuracy" :src="'data:image/jpeg;base64,' + accuracy"/>
@@ -68,11 +70,12 @@
 </template>
 
 <script>
+import store from "../../store.js";
+
 export default {
   data() {
     return {
-      datasets: [],
-      loadingDatasets: false,
+      datasets: store.state.datasets,
       dataset: undefined,
       datasetColumns: [],
       labelColumn: undefined,
@@ -82,21 +85,13 @@ export default {
       loadingConfigurations: false,
       configuration: undefined,
 
+      error: false,
       testRunLoading: false,
       accuracy: undefined,
       loss: undefined
     };
   },
-  async created() {
-    await this.loadDatasets();
-  },
   methods: {
-    async loadDatasets() {
-      this.loadingDatasets = true;
-      const response = await this.$http.get("/api/v1/datasets");
-      this.datasets = response.data.map(t => t.name);
-      this.loadingDatasets = false;
-    },
     async loadConfigurations() {
       this.loadingConfigurations = true;
       const response = await this.$http.get(
@@ -127,6 +122,7 @@ export default {
     },
     async testRun() {
       try {
+        this.error = false;
         this.testRunLoading = true;
         const payload = {
           dataset: this.dataset,
@@ -141,7 +137,11 @@ export default {
         const data = response.data;
         this.accuracy = data.plotAccuracy;
         this.loss = data.plotLoss;
-      } catch {}
+      } catch {
+        this.error = true;
+        this.accuracy = undefined;
+        this.loss = undefined;
+      }
       this.testRunLoading = false;
     }
   },

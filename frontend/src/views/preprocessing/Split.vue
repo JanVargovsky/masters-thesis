@@ -53,6 +53,8 @@
 </template>
 
 <script>
+import store from "../../store.js";
+
 const Units = 1000;
 
 export default {
@@ -62,7 +64,7 @@ export default {
       min: 0.001 * Units,
       max: 0.999 * Units,
 
-      datasets: [],
+      datasets: store.state.datasets,
       dataset: undefined,
       rows: undefined,
 
@@ -73,10 +75,6 @@ export default {
       submitError: false,
       done: false
     };
-  },
-  async created() {
-    const response = await this.$http.get("/api/v1/datasets");
-    this.datasets = response.data.map(t => t.name);
   },
   methods: {
     async submit() {

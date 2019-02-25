@@ -15,7 +15,6 @@
             label="Select dataset"
             editable
             class="pt-0 mt-0"
-            :loading="loadingDatasets"
             hide-details
           />
         </v-flex>
@@ -141,11 +140,12 @@
 </template>
 
 <script>
+import store from "../../store.js";
+
 export default {
   data() {
     return {
-      datasets: [],
-      loadingDatasets: false,
+      datasets: store.state.datasets,
       dataset: undefined,
 
       configurations: [],
@@ -158,16 +158,7 @@ export default {
       columns: []
     };
   },
-  async created() {
-    await this.loadDatasets();
-  },
   methods: {
-    async loadDatasets() {
-      this.loadingDatasets = true;
-      const response = await this.$http.get("/api/v1/datasets");
-      this.datasets = response.data.map(t => t.name);
-      this.loadingDatasets = false;
-    },
     async loadConfigurations() {
       this.loadingConfigurations = true;
       const response = await this.$http.get(

@@ -104,6 +104,8 @@
 </template>
 
 <script>
+import store from "../store.js";
+
 export default {
   data() {
     return {
@@ -113,7 +115,7 @@ export default {
       availableModelTypes: ["Classification", "Clustering", "Regression"],
       modelType: undefined,
 
-      availableDatasets: [],
+      availableDatasets: store.state.datasets,
       trainingDataset: undefined,
       testingDataset: undefined,
       selectedDatasetsValid: false,
@@ -127,10 +129,6 @@ export default {
       submitLoading: false,
       submitError: false
     };
-  },
-  async created() {
-    const response = await this.$http.get("/api/v1/datasets");
-    this.availableDatasets = response.data.map(t => t.name);
   },
   computed: {
     availableTrainingDatasets: function() {
