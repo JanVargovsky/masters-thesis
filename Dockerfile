@@ -2,7 +2,7 @@ FROM tensorflow/tensorflow:1.12.0-py3
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends && \
-    pip install --upgrade pip setuptools openpyxl gunicorn
+    pip install --upgrade pip setuptools gunicorn
 
 WORKDIR /app
 
