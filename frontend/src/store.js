@@ -8,6 +8,10 @@ const store = {
     while (this.state.allDatasets.length > 0) this.state.allDatasets.pop();
 
     datasets.forEach(dataset => this.state.allDatasets.push(dataset));
+
+    if (!this.state.filter) {
+      this.setDatasets(datasets)
+    }
   },
   setDatasets(datasets) {
     while (this.state.datasets.length > 0) this.state.datasets.pop();

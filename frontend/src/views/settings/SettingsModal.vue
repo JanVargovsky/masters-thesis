@@ -50,7 +50,6 @@ export default {
   async created() {
     const response = await this.$http.get("/api/v1/datasets");
     store.setAllDatasets(response.data.map(item => item.name));
-    store.setDatasets(response.data.map(item => item.name));
   },
   methods: {
     close() {
