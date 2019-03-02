@@ -29,3 +29,8 @@ def get_configurations(dataset):
         filename = os.path.basename(glob_path)
         name = os.path.splitext(filename)[0]
         yield name
+
+
+def delete_configuration(dataset, name):
+    filename = _get_filename(dataset, name)
+    os.remove(filename)

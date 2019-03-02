@@ -29,6 +29,7 @@
                 editable
                 class="pt-0 mt-0"
                 :loading="loadingConfigurations"
+                hide-details
               />
             </v-layout>
           </v-flex>

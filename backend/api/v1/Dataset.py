@@ -6,7 +6,7 @@ from infrastructure import datasets_path
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
 from infrastructure.PlotUtils import plot_histogram, plot_to_base64
 from infrastructure.Preprocessing import modify
-from infrastructure.PreprocessingConfiguration import load_configuration, get_configurations
+from infrastructure.PreprocessingConfiguration import load_configuration, get_configurations, delete_configuration
 from infrastructure.StatisticsCache import store, try_load
 
 api = Namespace('dataset')
@@ -114,3 +114,16 @@ class DatasetStatistics(Resource):
 class DatasetConfigurations(Resource):
     def get(self, dataset):
         return list(get_configurations(dataset))
+
+
+@api.route('/<string:dataset>/configurations/<string:configuration>')
+class DatasetConfiguration(Resource):
+    def get(self, dataset, configuration):
+        loaded_configuration = load_configuration(dataset, configuration)
+
+        return loaded_configuration
+
+    def delete(self, dataset, configuration):
+        delete_configuration(dataset, configuration)
+
+        return None, 204

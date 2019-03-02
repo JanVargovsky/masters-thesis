@@ -79,6 +79,11 @@ export default {
               link: "/preprocessing"
             },
             {
+              title: "Configurations",
+              icon: "mdi-file-tree",
+              link: "/datasets/configurations"
+            },
+            {
               title: "Statistics",
               icon: "mdi-chart-bar",
               link: "/statistics"
