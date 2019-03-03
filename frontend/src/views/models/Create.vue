@@ -46,6 +46,30 @@
             ></v-overflow-btn>
           </v-flex>
           <v-flex xs12 v-if="dataset">
+            <v-tabs v-model="tabs" grow slider-color="primary">
+              <v-tab>Auto</v-tab>
+              <v-tab-item></v-tab-item>
+
+              <v-tab>Simple</v-tab>
+              <v-tab-item></v-tab-item>
+
+              <v-tab>Advanced</v-tab>
+              <v-tab-item>
+                <v-layout row wrap>
+                  <v-flex xs12>
+                    <v-text-field v-model="epochs" type="number" label="Epochs"/>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="layers" label="Layers"/>
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-text-field v-model="validationSplit" type="number" label="Validation split"/>
+                  </v-flex>
+                </v-layout>
+              </v-tab-item>
+            </v-tabs>
+          </v-flex>
+          <v-flex xs12 v-if="dataset">
             <v-layout>
               <v-btn @click="testRun" :loading="testRunLoading" color="green" dark>Test run</v-btn>
               <v-btn color="primary">Create</v-btn>
@@ -54,13 +78,16 @@
           <v-flex xs12>
             <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
           </v-flex>
+          <v-flex xs12 v-if="score">
+            <v-layout justify-center column>
+              <v-icon size="100">{{ scoreIcon }}</v-icon>
+              <span class="text-xs-center">Accuracy: {{ score * 100 | round(2) }}%</span>
+            </v-layout>
+          </v-flex>
           <v-flex xs12>
-            <v-layout row>
-              <v-flex xs6>
-                <v-img v-if="accuracy" :src="'data:image/jpeg;base64,' + accuracy"/>
-              </v-flex>
-              <v-flex xs6>
-                <v-img v-if="loss" :src="'data:image/jpeg;base64,' + loss"/>
+            <v-layout row wrap>
+              <v-flex v-for="(plot, i) in plots" :key="i" xs12 md6 lg4>
+                <v-img :src="'data:image/jpeg;base64,' + plot"/>
               </v-flex>
             </v-layout>
           </v-flex>
@@ -86,10 +113,16 @@ export default {
       loadingConfigurations: false,
       configuration: undefined,
 
+      tabs: undefined,
+
+      epochs: 100,
+      layers: "32 32",
+      validationSplit: 0.3,
+
       error: false,
       testRunLoading: false,
-      accuracy: undefined,
-      loss: undefined
+      score: undefined,
+      plots: []
     };
   },
   methods: {
@@ -127,21 +160,28 @@ export default {
         this.testRunLoading = true;
         const payload = {
           dataset: this.dataset,
-          labelColumn: this.labelColumn
+          labelColumn: this.labelColumn,
+          epochs: parseInt(this.epochs),
+          layers: this.layers.match(/\d+/g).map(t => parseInt(t))
         };
+
         if (this.useConfiguration && this.configuration)
           payload.configuration = this.configuration;
+
+        const validationSplit = parseFloat(this.validationSplit);
+        if (!isNaN(validationSplit)) payload.validationSplit = validationSplit;
+
         const response = await this.$http.post(
           `/api/v1/classification/test-run`,
           payload
         );
         const data = response.data;
-        this.accuracy = data.plotAccuracy;
-        this.loss = data.plotLoss;
+        this.score = data.score;
+        this.plots = data.plots;
       } catch {
         this.error = true;
-        this.accuracy = undefined;
-        this.loss = undefined;
+        this.score = undefined;
+        this.plots = [];
       }
       this.testRunLoading = false;
     }
@@ -151,6 +191,20 @@ export default {
       this.configuration = undefined;
       this.labelColumn = undefined;
       await Promise.all([this.loadConfigurations(), this.loadColumns()]);
+    }
+  },
+  computed: {
+    scoreIcon: function() {
+      if (this.score < 0.3) return "mdi-emoticon-dead";
+      if (this.score < 0.5) return "mdi-emoticon-sad";
+      if (this.score < 0.7) return "mdi-emoticon-neutral";
+      if (this.score < 0.9) return "mdi-emoticon-happy";
+      return "mdi-emoticon-excited";
+    }
+  },
+  filters: {
+    round: function(value, accuracy) {
+      return +value.toFixed(accuracy);
     }
   }
 };

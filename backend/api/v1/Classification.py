@@ -4,7 +4,8 @@ from sklearn.utils import shuffle
 
 from infrastructure.Classification import ClassificationModel
 from infrastructure.DatasetUtils import get_dataset
-from infrastructure.PlotUtils import plot_history_accuracy, plot_history_loss, plot_to_base64
+from infrastructure.PlotUtils import plot_history_accuracy, plot_history_loss, plot_to_base64, \
+    plot_classification_predictions
 from infrastructure.PreprocessingConfiguration import load_configuration
 from infrastructure.Preprocessing import modify
 
@@ -13,7 +14,10 @@ api = Namespace('classification')
 classification_test_run = api.model('ClassificationTestRun', {
     'dataset': fields.String(required=True, description='Dataset'),
     'labelColumn': fields.String(required=True, description='Name of the label column'),
-    'configuration': fields.String(description='Configuration name')
+    'configuration': fields.String(description='Configuration name'),
+    'epochs': fields.Integer(required=True, min=1, description='Number of epochs to train the model'),
+    'layers': fields.List(fields.Integer, required=True, description="Number of neurons in each dense layer"),
+    'validationSplit': fields.Float(min=0, max=1, description="Number of neurons in each dense layer")
 })
 
 
@@ -37,22 +41,41 @@ class ClassificationTestRun(Resource):
 
         input_dim = data_x.columns.size
         output_dim = data_y.unique().size
-        epochs = 200
-        layers = [32, 32]
-        validation_split = 0.3
+        epochs = api.payload['epochs']
+        layers = api.payload['layers']
+        for layer in layers:
+            if layer <= 0:
+                return "Invalid layer", 400
 
+        validation_split = api.payload['validationSplit'] if 'validationSplit' in api.payload else 0
+
+        keras.backend.clear_session()
         model = ClassificationModel(input_dim, output_dim, layers)
 
         history = model.fit(x=data_x, y=data_y, epochs=epochs, verbose=0, validation_split=validation_split)
+        predicts = model.predict_classes(data_x)
+        score = float((data_y == predicts).sum() / predicts.size)
 
-        keras.backend.clear_session()
+        plots = {}
 
         plot_history_accuracy(history)
-        plot_accuracy = plot_to_base64()
+        plots['accuracy'] = plot_to_base64()
         plot_history_loss(history)
-        plot_loss = plot_to_base64()
+        plots['loss'] = plot_to_base64()
+
+        plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=False)
+        plots['predictions'] = plot_to_base64()
+
+        plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=True)
+        plots['predictions2'] = plot_to_base64()
+
+        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=False)
+        plots['predictions3'] = plot_to_base64()
+
+        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=True)
+        plots['predictions4'] = plot_to_base64()
 
         return {
-            'plotAccuracy': plot_accuracy,
-            'plotLoss': plot_loss
+            'score': score,
+            'plots': plots
         }

@@ -23,3 +23,6 @@ class ClassificationModel:
     def score(self, **kwargs):
         metrics = self.model.evaluate(**kwargs)
         return dict(zip(self.model.metrics_names, metrics))
+
+    def predict_classes(self, x, **kwargs):
+        return self.model.predict_classes(x, **kwargs)
