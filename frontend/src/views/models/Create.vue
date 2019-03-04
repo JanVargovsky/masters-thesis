@@ -51,7 +51,67 @@
               <v-tab-item></v-tab-item>
 
               <v-tab>Simple</v-tab>
-              <v-tab-item></v-tab-item>
+              <v-tab-item>
+                <v-layout row wrap>
+                  <v-flex xs12>
+                    <v-subheader class="pa-0">Time</v-subheader>
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="removeTime" flat icon color="red">
+                        <v-icon large>mdi-minus-box</v-icon>
+                      </v-btn>
+                      <span>Train less</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="addTime" flat icon color="green">
+                        <v-icon large>mdi-plus-box</v-icon>
+                      </v-btn>
+                      <span>Train more</span>
+                    </v-tooltip>
+                    {{ epochs }}
+                  </v-flex>
+                  <v-flex xs12>
+                    <v-subheader class="pa-0">Size</v-subheader>
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="removeLayer" flat icon color="red">
+                        <v-icon large>mdi-collapse-all</v-icon>
+                      </v-btn>
+                      <span>Remove layer</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="addLayer" flat icon color="green">
+                        <v-icon large>mdi-expand-all</v-icon>
+                      </v-btn>
+                      <span>Add layer</span>
+                    </v-tooltip>
+
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="shrinkLayer" flat icon color="red">
+                        <!-- <v-icon>mdi-layers-minus</v-icon> -->
+                        <svg style="width:36px;height:36px" viewBox="0 0 24 24">
+                          <path
+                            fill="#F44336"
+                            d="M22,17V19H14V17H22M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
+                          ></path>
+                        </svg>
+                      </v-btn>
+                      <span>Shrink layer</span>
+                    </v-tooltip>
+                    <v-tooltip top>
+                      <v-btn slot="activator" @click="expandLayer" flat icon color="green">
+                        <!-- <v-icon>mdi-layers-plus</v-icon> -->
+                        <svg style="width:36px;height:36px" viewBox="0 0 24 24">
+                          <path
+                            fill="#4CAF50"
+                            d="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
+                          ></path>
+                        </svg>
+                      </v-btn>
+                      <span>Expand layer</span>
+                    </v-tooltip>
+                    {{ layers }}
+                  </v-flex>
+                </v-layout>
+              </v-tab-item>
 
               <v-tab>Advanced</v-tab>
               <v-tab-item>
@@ -81,7 +141,7 @@
           <v-flex xs12 v-if="score">
             <v-layout justify-center column>
               <v-icon size="100">{{ scoreIcon }}</v-icon>
-              <span class="text-xs-center">Accuracy: {{ score * 100 | round(2) }}%</span>
+              <span class="text-xs-center body-2">Accuracy: {{ score * 100 | round(2) }}%</span>
             </v-layout>
           </v-flex>
           <v-flex xs12>
@@ -154,6 +214,47 @@ export default {
       });
       if (guess) this.labelColumn = guess.name;
     },
+    calculateTimeDiff() {
+      if (this.epochs > 1000) return 100;
+      if (this.epochs > 100) return Math.floor(this.epochs / 100) * 10;
+      if (this.epochs > 10) return 10;
+      return 1;
+    },
+    addTime() {
+      this.epochs += this.calculateTimeDiff();
+    },
+    removeTime() {
+      this.epochs -= this.calculateTimeDiff();
+      if (this.epochs < 1) this.epochs = 1;
+    },
+    addLayer() {
+      this.layers = [...this.layersArray, 1].join(" ");
+    },
+    removeLayer() {
+      let newLayers = this.layersArray.slice(0, -1);
+      if (newLayers.length == 0) newLayers = [1];
+      this.layers = newLayers.join(" ");
+    },
+    expandLayer() {
+      let layers = this.layersArray;
+      const indexOfSmallest = layers.reduce(
+        (lowest, next, index) => (next < layers[lowest] ? index : lowest),
+        0
+      );
+
+      layers[indexOfSmallest] *= 2;
+      this.layers = layers.join(" ");
+    },
+    shrinkLayer() {
+      let layers = this.layersArray;
+      const indexOfLargest = layers.reduceRight(
+        (largest, next, index) => (next > layers[largest] ? index : largest),
+        layers.length - 1
+      );
+
+      layers[indexOfLargest] = Math.ceil(layers[indexOfLargest] / 2);
+      this.layers = layers.join(" ");
+    },
     async testRun() {
       try {
         this.error = false;
@@ -162,7 +263,7 @@ export default {
           dataset: this.dataset,
           labelColumn: this.labelColumn,
           epochs: parseInt(this.epochs),
-          layers: this.layers.match(/\d+/g).map(t => parseInt(t))
+          layers: this.layersArray
         };
 
         if (this.useConfiguration && this.configuration)
@@ -200,6 +301,9 @@ export default {
       if (this.score < 0.7) return "mdi-emoticon-neutral";
       if (this.score < 0.9) return "mdi-emoticon-happy";
       return "mdi-emoticon-excited";
+    },
+    layersArray: function() {
+      return this.layers.match(/\d+/g).map(t => parseInt(t));
     }
   },
   filters: {
