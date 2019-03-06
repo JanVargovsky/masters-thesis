@@ -72,7 +72,7 @@
                   <v-flex xs12>
                     <v-subheader class="pa-0">Size</v-subheader>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="removeLayer" flat icon color="red">
+                      <v-btn slot="activator" @click="removeLastLayer" flat icon color="red">
                         <v-icon large>mdi-collapse-all</v-icon>
                       </v-btn>
                       <span>Remove layer</span>
@@ -85,7 +85,7 @@
                     </v-tooltip>
 
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="shrinkLayer" flat icon color="red">
+                      <v-btn slot="activator" @click="autoShrinkLayer" flat icon color="red">
                         <!-- <v-icon>mdi-layers-minus</v-icon> -->
                         <svg style="width:36px;height:36px" viewBox="0 0 24 24">
                           <path
@@ -97,7 +97,7 @@
                       <span>Shrink layer</span>
                     </v-tooltip>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="expandLayer" flat icon color="green">
+                      <v-btn slot="activator" @click="autoExpandLayer" flat icon color="green">
                         <!-- <v-icon>mdi-layers-plus</v-icon> -->
                         <svg style="width:36px;height:36px" viewBox="0 0 24 24">
                           <path
@@ -108,7 +108,7 @@
                       </v-btn>
                       <span>Expand layer</span>
                     </v-tooltip>
-                    {{ layers }}
+                    {{ layersDisplay }}
                   </v-flex>
                 </v-layout>
               </v-tab-item>
@@ -120,16 +120,98 @@
                     <v-text-field v-model="epochs" type="number" label="Epochs"/>
                   </v-flex>
                   <v-flex xs12>
-                    <v-text-field v-model="layers" label="Layers"/>
+                    <v-text-field
+                      v-model="validationSplit"
+                      type="number"
+                      label="Validation split"
+                      hide-details
+                    />
                   </v-flex>
                   <v-flex xs12>
-                    <v-text-field v-model="validationSplit" type="number" label="Validation split"/>
+                    <v-subheader class="pa-0">Layers</v-subheader>
+                    <v-layout>
+                      <v-flex shrink>
+                        <v-tooltip top>
+                          <v-btn slot="activator" @click="addLayerStart" flat icon>
+                            <v-icon class="mdi-rotate-180">mdi-expand-all-outline</v-icon>
+                          </v-btn>
+                          <span>Add new layer to start</span>
+                        </v-tooltip>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-tooltip top>
+                          <v-btn slot="activator" @click="addLayerEnd" flat icon>
+                            <v-icon>mdi-expand-all</v-icon>
+                          </v-btn>
+                          <span>Add new layer to end</span>
+                        </v-tooltip>
+                      </v-flex>
+                    </v-layout>
+                    <v-layout v-for="(layer, index) in layers" :key="index">
+                      <v-flex shrink>
+                        <v-tooltip top>
+                          <v-btn slot="activator" @click="shrinkLayer(index)" flat icon color="red">
+                            <!-- <v-icon>mdi-layers-minus</v-icon> -->
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                              <path
+                                fill="#F44336"
+                                d="M22,17V19H14V17H22M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
+                              ></path>
+                            </svg>
+                          </v-btn>
+                          <span>Shrink layer</span>
+                        </v-tooltip>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-text-field
+                          v-model="layers[index]"
+                          type="number"
+                          :label="'Dense layer ' + (index+1)"
+                          flat
+                          hide-details
+                        ></v-text-field>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-tooltip top>
+                          <v-btn
+                            slot="activator"
+                            @click="expandLayer(index)"
+                            flat
+                            icon
+                            color="green"
+                          >
+                            <!-- <v-icon>mdi-layers-plus</v-icon> -->
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                              <path
+                                fill="#4CAF50"
+                                d="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
+                              ></path>
+                            </svg>
+                          </v-btn>
+                          <span>Expand layer</span>
+                        </v-tooltip>
+                      </v-flex>
+                      <v-flex shrink>
+                        <v-tooltip top>
+                          <v-btn slot="activator" @click="removeLayer(index)" flat icon>
+                            <!-- <v-icon>mdi-layers-remove</v-icon> -->
+                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                              <path
+                                fill="#000000"
+                                d="M14.46,15.88L15.88,14.46L18,16.59L20.12,14.46L21.54,15.88L19.41,18L21.54,20.12L20.12,21.54L18,19.41L15.88,21.54L14.46,20.12L16.59,18L14.46,15.88M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
+                              ></path>
+                            </svg>
+                          </v-btn>
+                          <span>Delete layer</span>
+                        </v-tooltip>
+                      </v-flex>
+                    </v-layout>
                   </v-flex>
                 </v-layout>
               </v-tab-item>
             </v-tabs>
           </v-flex>
-          <v-flex xs12 v-if="dataset">
+          <v-flex xs12 v-if="dataset" class="pt-3">
             <v-layout>
               <v-btn @click="testRun" :loading="testRunLoading" color="green" dark>Test run</v-btn>
               <v-btn color="primary">Create</v-btn>
@@ -176,7 +258,7 @@ export default {
       tabs: undefined,
 
       epochs: 100,
-      layers: "32 32",
+      layers: [32, 32],
       validationSplit: 0.3,
 
       error: false,
@@ -228,32 +310,44 @@ export default {
       if (this.epochs < 1) this.epochs = 1;
     },
     addLayer() {
-      this.layers = [...this.layersArray, 1].join(" ");
+      this.layers.push(1);
     },
-    removeLayer() {
-      let newLayers = this.layersArray.slice(0, -1);
-      if (newLayers.length == 0) newLayers = [1];
-      this.layers = newLayers.join(" ");
+    addLayerStart() {
+      this.layers.unshift(1);
     },
-    expandLayer() {
-      let layers = this.layersArray;
-      const indexOfSmallest = layers.reduce(
-        (lowest, next, index) => (next < layers[lowest] ? index : lowest),
+    addLayerEnd() {
+      this.layers.push(1);
+    },
+    removeLastLayer() {
+      this.layers.pop();
+    },
+    removeLayer(index) {
+      this.layers.splice(index, 1);
+    },
+    autoExpandLayer() {
+      const indexOfSmallest = this.layers.reduce(
+        (lowest, next, index) => (next < this.layers[lowest] ? index : lowest),
         0
       );
 
-      layers[indexOfSmallest] *= 2;
-      this.layers = layers.join(" ");
+      this.expandLayer(indexOfSmallest);
     },
-    shrinkLayer() {
-      let layers = this.layersArray;
-      const indexOfLargest = layers.reduceRight(
-        (largest, next, index) => (next > layers[largest] ? index : largest),
-        layers.length - 1
+    autoShrinkLayer() {
+      const indexOfLargest = this.layers.reduceRight(
+        (largest, next, index) =>
+          next > this.layers[largest] ? index : largest,
+        this.layers.length - 1
       );
 
-      layers[indexOfLargest] = Math.ceil(layers[indexOfLargest] / 2);
-      this.layers = layers.join(" ");
+      this.shrinkLayer(indexOfLargest);
+    },
+    expandLayer(index) {
+      if (index < this.layers.length)
+        this.$set(this.layers, index, this.layers[index] * 2);
+    },
+    shrinkLayer(index) {
+      if (index < this.layers.length)
+        this.$set(this.layers, index, Math.ceil(this.layers[index] / 2));
     },
     async testRun() {
       try {
@@ -263,7 +357,7 @@ export default {
           dataset: this.dataset,
           labelColumn: this.labelColumn,
           epochs: parseInt(this.epochs),
-          layers: this.layersArray
+          layers: this.layers
         };
 
         if (this.useConfiguration && this.configuration)
@@ -302,8 +396,9 @@ export default {
       if (this.score < 0.9) return "mdi-emoticon-happy";
       return "mdi-emoticon-excited";
     },
-    layersArray: function() {
-      return this.layers.match(/\d+/g).map(t => parseInt(t));
+    layersDisplay: function() {
+      if (this.layers.length == 0) return "No layers!";
+      return this.layers.join(" - ");
     }
   },
   filters: {
