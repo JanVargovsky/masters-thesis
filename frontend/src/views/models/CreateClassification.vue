@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar color="teal" dark flat dense card>
-      <v-toolbar-title class="subheading">Model creation</v-toolbar-title>
+      <v-toolbar-title class="subheading">Classification model creation</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-form>

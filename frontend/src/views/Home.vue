@@ -36,7 +36,8 @@ export default {
       items: [
         {
           title: "Dataset",
-          description: "We need a data to operate on. Upload a new dataset with your data.",
+          description:
+            "We need a data to operate on. Upload a new dataset with your data.",
           color: "indigo",
           icon: "mdi-database-plus",
           links: [
@@ -84,12 +85,8 @@ export default {
           icon: "mdi-cube-outline",
           links: [
             {
-              to: "models/create-simple",
-              name: "Create simple"
-            },
-            {
-              to: "/models/create",
-              name: "Create"
+              to: "/models/create-classification",
+              name: "Classification"
             }
           ]
         }

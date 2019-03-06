@@ -14,8 +14,7 @@ import Preprocessing from "./views/Preprocessing.vue";
 import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
 
-import CreateModelSimple from "./views/CreateModelSimple.vue";
-import CreateModel from "./views/models/Create.vue";
+import CreateClassificationModel from "./views/models/CreateClassification.vue";
 import Models from "./views/Models.vue";
 
 Vue.use(Router);
@@ -64,12 +63,8 @@ export default new Router({
       component: Statistics
     },
     {
-      path: "/models/create-simple",
-      component: CreateModelSimple
-    },
-    {
-      path: "/models/create",
-      component: CreateModel
+      path: "/models/create-classification",
+      component: CreateClassificationModel
     },
     {
       path: "/models/list",

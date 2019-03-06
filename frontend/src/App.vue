@@ -95,14 +95,9 @@ export default {
           icon: "mdi-cube",
           items: [
             {
-              title: "Create simple",
-              icon: "mdi-cube-outline",
-              link: "/models/create-simple"
-            },
-            {
-              title: "Create",
-              icon: "mdi-cube-outline",
-              link: "/models/create"
+              title: "Create classification",
+              icon: "mdi-shape-outline",
+              link: "/models/create-classification"
             },
             { title: "List", icon: "mdi-view-list", link: "/models/list" }
           ]
