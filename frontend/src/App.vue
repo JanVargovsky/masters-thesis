@@ -99,6 +99,11 @@ export default {
               icon: "mdi-shape-outline",
               link: "/models/create-classification"
             },
+            {
+              title: "Create clustering",
+              icon: "mdi-chart-bubble",
+              link: "/models/create-clustering"
+            },
             { title: "List", icon: "mdi-view-list", link: "/models/list" }
           ]
         },
