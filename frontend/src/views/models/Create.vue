@@ -47,9 +47,6 @@
           </v-flex>
           <v-flex xs12 v-if="dataset">
             <v-tabs v-model="tabs" grow slider-color="primary">
-              <v-tab>Auto</v-tab>
-              <v-tab-item></v-tab-item>
-
               <v-tab>Simple</v-tab>
               <v-tab-item>
                 <v-layout row wrap>
