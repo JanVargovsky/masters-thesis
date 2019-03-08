@@ -44,8 +44,10 @@
           </v-layout>
         </v-flex>
         <v-flex xs12 v-if="dataset">
-          <v-progress-linear v-if="loadingConfiguration" indeterminate/>
-          <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+          <v-progress-linear v-if="loadingConfiguration" indeterminate />
+          <v-alert :value="error" type="error" transition="scale-transition"
+            >Server error.</v-alert
+          >
         </v-flex>
         <v-flex xs12 v-if="configuration">
           <pre>{{ JSON.stringify(configuration, null, 2) }}</pre>

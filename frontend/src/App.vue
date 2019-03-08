@@ -10,14 +10,23 @@
             <v-list-tile-title>{{ item.title }}</v-list-tile-title>
           </v-list-tile>
 
-          <v-list-group v-else :key="item.to" :prepend-icon="item.icon" no-action>
+          <v-list-group
+            v-else
+            :key="item.to"
+            :prepend-icon="item.icon"
+            no-action
+          >
             <v-list-tile slot="activator">
               <v-list-tile-content>
                 <v-list-tile-title>{{ item.title }}</v-list-tile-title>
               </v-list-tile-content>
             </v-list-tile>
 
-            <v-list-tile v-for="item in item.items" :key="item.to" :to="item.link">
+            <v-list-tile
+              v-for="item in item.items"
+              :key="item.to"
+              :to="item.link"
+            >
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
               </v-list-tile-action>
@@ -35,13 +44,11 @@
 
       <v-spacer></v-spacer>
 
-      <settings-modal/>
+      <settings-modal />
     </v-toolbar>
 
     <v-content>
-      <v-container fluid>
-        <router-view></router-view>
-      </v-container>
+      <v-container fluid> <router-view></router-view> </v-container>
     </v-content>
   </v-app>
 </template>

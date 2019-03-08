@@ -1,9 +1,10 @@
 <template>
   <v-card>
     <v-toolbar color="green" dark flat dense card>
-      <v-toolbar-title
-        class="subheading"
-      >Analyse your dataset - descriptive statistics and histograms</v-toolbar-title>
+      <v-toolbar-title class="subheading"
+        >Analyse your dataset - descriptive statistics and
+        histograms</v-toolbar-title
+      >
     </v-toolbar>
     <v-card-text>
       <v-layout row wrap>
@@ -21,7 +22,11 @@
         <v-flex xs12 v-if="dataset">
           <v-subheader class="pa-0">Configuration</v-subheader>
           <v-layout>
-            <v-checkbox v-model="useConfiguration" hide-details class="shrink"/>
+            <v-checkbox
+              v-model="useConfiguration"
+              hide-details
+              class="shrink"
+            />
             <v-overflow-btn
               v-model="configuration"
               :items="configurations"
@@ -34,12 +39,13 @@
           </v-layout>
         </v-flex>
         <v-flex xs12>
-          <v-progress-linear v-if="loadingDatasetDetails" indeterminate/>
+          <v-progress-linear v-if="loadingDatasetDetails" indeterminate />
           <v-alert
             :value="datasetDetailsError"
             type="error"
             transition="scale-transition"
-          >Server error.</v-alert>
+            >Server error.</v-alert
+          >
         </v-flex>
 
         <v-container fluid grid-list-md class="pa-0">
@@ -57,74 +63,74 @@
                   <h4>{{ props.item.name }} ({{ props.item.type }})</h4>
                 </v-card-title>
 
-                <v-divider/>
+                <v-divider />
 
                 <v-list dense v-if="props.item.numeric">
                   <v-list-tile>
                     <v-list-tile-content>Count:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.count }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.count
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Mean:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.mean }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.mean
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Std:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.std }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.std
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Min:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.min }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.min
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Q1, 25%:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.p25 }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.p25
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Q2, Median, 50%:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.p50 }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.p50
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Q3, 75%:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.p75 }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.p75
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Max:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.max }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.max
+                    }}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
                 <v-list dense v-else>
                   <v-list-tile>
                     <v-list-tile-content>Count:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.count }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.count
+                    }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Unique:</v-list-tile-content>
-                    <v-list-tile-content
-                      class="align-end"
-                    >{{ props.item.descriptiveStatistics.unique }}</v-list-tile-content>
+                    <v-list-tile-content class="align-end">{{
+                      props.item.descriptiveStatistics.unique
+                    }}</v-list-tile-content>
                   </v-list-tile>
                 </v-list>
 
-                <v-divider/>
+                <v-divider />
 
                 <v-img
                   v-if="props.item.histogramType === 'base64'"
@@ -201,4 +207,3 @@ export default {
   }
 };
 </script>
-

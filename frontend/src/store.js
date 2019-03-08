@@ -10,7 +10,7 @@ const store = {
     datasets.forEach(dataset => this.state.allDatasets.push(dataset));
 
     if (!this.state.filter) {
-      this.setDatasets(datasets)
+      this.setDatasets(datasets);
     }
   },
   setDatasets(datasets) {

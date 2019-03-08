@@ -17,17 +17,31 @@
               hint="CSV or Excel file"
               persistent-hint
             />
-            <input type="file" hidden ref="dataset" accept=".csv, .xlsx, .xlsm" @change="onChange">
+            <input
+              type="file"
+              hidden
+              ref="dataset"
+              accept=".csv, .xlsx, .xlsm"
+              @change="onChange"
+            />
           </v-flex>
           <v-flex xs12>
-            <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+            <v-alert :value="error" type="error" transition="scale-transition"
+              >Server error.</v-alert
+            >
             <v-alert :value="done" type="success" transition="scale-transition">
-              Dataset
-              <strong>{{ dataset }}</strong> has been successfully uploaded.
+              Dataset <strong>{{ dataset }}</strong> has been successfully
+              uploaded.
             </v-alert>
           </v-flex>
           <v-flex xs12>
-            <v-btn color="primary" :disabled="!dataset" :loading="loading" @click="submit">Upload</v-btn>
+            <v-btn
+              color="primary"
+              :disabled="!dataset"
+              :loading="loading"
+              @click="submit"
+              >Upload</v-btn
+            >
           </v-flex>
         </v-layout>
       </v-form>

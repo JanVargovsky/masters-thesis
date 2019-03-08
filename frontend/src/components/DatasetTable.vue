@@ -1,7 +1,9 @@
 <template>
   <v-layout row wrap>
     <v-flex xs12>
-      <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+      <v-alert :value="error" type="error" transition="scale-transition"
+        >Server error.</v-alert
+      >
     </v-flex>
     <v-flex xs12>
       <v-text-field
@@ -21,15 +23,19 @@
         :loading="loading"
         :rows-per-page-items="[10, 25, 50, 100]"
       >
-        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+        <v-progress-linear
+          slot="progress"
+          color="blue"
+          indeterminate
+        ></v-progress-linear>
 
         <template slot="items" slot-scope="props">
-          <tr :class="{'red lighten-5': props.item.hasNA}">
+          <tr :class="{ 'red lighten-5': props.item.hasNA }">
             <td class="shrink">{{ props.item.id }}</td>
             <td
               v-for="(item, index) in props.item.values"
               :key="String(props.item.id) + String(index) + String(item)"
-              :class="{'red': item === NA }"
+              :class="{ red: item === NA }"
             >
               <v-tooltip top v-if="item === NA">
                 <span slot="activator">{{ item }}</span>
@@ -41,13 +47,15 @@
         </template>
 
         <template slot="no-data">
-          <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
+          <v-alert :value="true && !loading" color="error" icon="mdi-alert"
+            >No data available.</v-alert
+          >
         </template>
       </v-data-table>
     </v-flex>
   </v-layout>
 </template>
- 
+
 <script>
 export default {
   props: {

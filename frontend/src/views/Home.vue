@@ -20,7 +20,8 @@
                 :to="link.to"
                 class="ml-0"
                 outline
-              >{{ link.name}}</v-btn>
+                >{{ link.name }}</v-btn
+              >
             </v-card-text>
           </v-card>
         </v-timeline-item>

@@ -1,7 +1,9 @@
 <template>
   <v-card>
     <v-toolbar color="teal" dark flat dense card>
-      <v-toolbar-title class="subheading">Classification model creation</v-toolbar-title>
+      <v-toolbar-title class="subheading"
+        >Classification model creation</v-toolbar-title
+      >
     </v-toolbar>
     <v-card-text>
       <v-form>
@@ -20,7 +22,11 @@
           <v-flex xs12 v-if="dataset">
             <v-subheader class="pa-0">Configuration</v-subheader>
             <v-layout>
-              <v-checkbox v-model="useConfiguration" hide-details class="shrink"/>
+              <v-checkbox
+                v-model="useConfiguration"
+                hide-details
+                class="shrink"
+              />
               <v-overflow-btn
                 v-model="configuration"
                 :items="configurations"
@@ -53,13 +59,25 @@
                   <v-flex xs12>
                     <v-subheader class="pa-0">Time</v-subheader>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="removeTime" flat icon color="red">
+                      <v-btn
+                        slot="activator"
+                        @click="removeTime"
+                        flat
+                        icon
+                        color="red"
+                      >
                         <v-icon large>mdi-minus-box</v-icon>
                       </v-btn>
                       <span>Train less</span>
                     </v-tooltip>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="addTime" flat icon color="green">
+                      <v-btn
+                        slot="activator"
+                        @click="addTime"
+                        flat
+                        icon
+                        color="green"
+                      >
                         <v-icon large>mdi-plus-box</v-icon>
                       </v-btn>
                       <span>Train more</span>
@@ -69,20 +87,38 @@
                   <v-flex xs12>
                     <v-subheader class="pa-0">Size</v-subheader>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="removeLastLayer" flat icon color="red">
+                      <v-btn
+                        slot="activator"
+                        @click="removeLastLayer"
+                        flat
+                        icon
+                        color="red"
+                      >
                         <v-icon large>mdi-collapse-all</v-icon>
                       </v-btn>
                       <span>Remove layer</span>
                     </v-tooltip>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="addLayer" flat icon color="green">
+                      <v-btn
+                        slot="activator"
+                        @click="addLayer"
+                        flat
+                        icon
+                        color="green"
+                      >
                         <v-icon large>mdi-expand-all</v-icon>
                       </v-btn>
                       <span>Add layer</span>
                     </v-tooltip>
 
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="autoShrinkLayer" flat icon color="red">
+                      <v-btn
+                        slot="activator"
+                        @click="autoShrinkLayer"
+                        flat
+                        icon
+                        color="red"
+                      >
                         <!-- <v-icon>mdi-layers-minus</v-icon> -->
                         <svg style="width:36px;height:36px" viewBox="0 0 24 24">
                           <path
@@ -94,7 +130,13 @@
                       <span>Shrink layer</span>
                     </v-tooltip>
                     <v-tooltip top>
-                      <v-btn slot="activator" @click="autoExpandLayer" flat icon color="green">
+                      <v-btn
+                        slot="activator"
+                        @click="autoExpandLayer"
+                        flat
+                        icon
+                        color="green"
+                      >
                         <!-- <v-icon>mdi-layers-plus</v-icon> -->
                         <svg style="width:36px;height:36px" viewBox="0 0 24 24">
                           <path
@@ -114,7 +156,11 @@
               <v-tab-item>
                 <v-layout row wrap>
                   <v-flex xs12>
-                    <v-text-field v-model="epochs" type="number" label="Epochs"/>
+                    <v-text-field
+                      v-model="epochs"
+                      type="number"
+                      label="Epochs"
+                    />
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field
@@ -129,15 +175,27 @@
                     <v-layout>
                       <v-flex shrink>
                         <v-tooltip top>
-                          <v-btn slot="activator" @click="addLayerStart" flat icon>
-                            <v-icon class="mdi-rotate-180">mdi-expand-all-outline</v-icon>
+                          <v-btn
+                            slot="activator"
+                            @click="addLayerStart"
+                            flat
+                            icon
+                          >
+                            <v-icon class="mdi-rotate-180"
+                              >mdi-expand-all-outline</v-icon
+                            >
                           </v-btn>
                           <span>Add new layer to start</span>
                         </v-tooltip>
                       </v-flex>
                       <v-flex shrink>
                         <v-tooltip top>
-                          <v-btn slot="activator" @click="addLayerEnd" flat icon>
+                          <v-btn
+                            slot="activator"
+                            @click="addLayerEnd"
+                            flat
+                            icon
+                          >
                             <v-icon>mdi-expand-all</v-icon>
                           </v-btn>
                           <span>Add new layer to end</span>
@@ -147,9 +205,18 @@
                     <v-layout v-for="(layer, index) in layers" :key="index">
                       <v-flex shrink>
                         <v-tooltip top>
-                          <v-btn slot="activator" @click="shrinkLayer(index)" flat icon color="red">
+                          <v-btn
+                            slot="activator"
+                            @click="shrinkLayer(index)"
+                            flat
+                            icon
+                            color="red"
+                          >
                             <!-- <v-icon>mdi-layers-minus</v-icon> -->
-                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <svg
+                              style="width:24px;height:24px"
+                              viewBox="0 0 24 24"
+                            >
                               <path
                                 fill="#F44336"
                                 d="M22,17V19H14V17H22M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
@@ -163,7 +230,7 @@
                         <v-text-field
                           v-model="layers[index]"
                           type="number"
-                          :label="'Dense layer ' + (index+1)"
+                          :label="'Dense layer ' + (index + 1)"
                           flat
                           hide-details
                         ></v-text-field>
@@ -178,7 +245,10 @@
                             color="green"
                           >
                             <!-- <v-icon>mdi-layers-plus</v-icon> -->
-                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <svg
+                              style="width:24px;height:24px"
+                              viewBox="0 0 24 24"
+                            >
                               <path
                                 fill="#4CAF50"
                                 d="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
@@ -190,9 +260,17 @@
                       </v-flex>
                       <v-flex shrink>
                         <v-tooltip top>
-                          <v-btn slot="activator" @click="removeLayer(index)" flat icon>
+                          <v-btn
+                            slot="activator"
+                            @click="removeLayer(index)"
+                            flat
+                            icon
+                          >
                             <!-- <v-icon>mdi-layers-remove</v-icon> -->
-                            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                            <svg
+                              style="width:24px;height:24px"
+                              viewBox="0 0 24 24"
+                            >
                               <path
                                 fill="#000000"
                                 d="M14.46,15.88L15.88,14.46L18,16.59L20.12,14.46L21.54,15.88L19.41,18L21.54,20.12L20.12,21.54L18,19.41L15.88,21.54L14.46,20.12L16.59,18L14.46,15.88M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
@@ -210,23 +288,33 @@
           </v-flex>
           <v-flex xs12 v-if="dataset" class="pt-3">
             <v-layout>
-              <v-btn @click="testRun" :loading="testRunLoading" color="green" dark>Test run</v-btn>
+              <v-btn
+                @click="testRun"
+                :loading="testRunLoading"
+                color="green"
+                dark
+                >Test run</v-btn
+              >
               <v-btn color="primary">Create</v-btn>
             </v-layout>
           </v-flex>
           <v-flex xs12>
-            <v-alert :value="error" type="error" transition="scale-transition">Server error.</v-alert>
+            <v-alert :value="error" type="error" transition="scale-transition"
+              >Server error.</v-alert
+            >
           </v-flex>
           <v-flex xs12 v-if="score">
             <v-layout justify-center column>
               <v-icon size="100">{{ scoreIcon }}</v-icon>
-              <span class="text-xs-center body-2">Accuracy: {{ score * 100 | round(2) }}%</span>
+              <span class="text-xs-center body-2"
+                >Accuracy: {{ (score * 100) | round(2) }}%</span
+              >
             </v-layout>
           </v-flex>
           <v-flex xs12>
             <v-layout row wrap>
               <v-flex v-for="(plot, i) in plots" :key="i" xs12 md6 lg4>
-                <v-img :src="'data:image/jpeg;base64,' + plot"/>
+                <v-img :src="'data:image/jpeg;base64,' + plot" />
               </v-flex>
             </v-layout>
           </v-flex>

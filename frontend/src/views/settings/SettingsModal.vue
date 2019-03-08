@@ -1,15 +1,17 @@
 <template>
   <v-dialog v-model="show" max-width="600px">
-    <v-btn slot="activator" icon>
-      <v-icon>mdi-settings</v-icon>
-    </v-btn>
+    <v-btn slot="activator" icon> <v-icon>mdi-settings</v-icon> </v-btn>
     <v-card>
       <v-card-title class="headline">Settings</v-card-title>
       <v-card-text>
         <v-container fluid>
           <v-layout wrap>
             <v-flex xs12>
-              <v-switch v-model="filter" label="Select datasets you are working with" hide-details/>
+              <v-switch
+                v-model="filter"
+                label="Select datasets you are working with"
+                hide-details
+              />
               <v-combobox
                 v-model="datasets"
                 :items="allDatasets"

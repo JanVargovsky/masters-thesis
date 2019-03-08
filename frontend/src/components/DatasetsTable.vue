@@ -10,7 +10,9 @@
           clearable
           prepend-icon="mdi-database-search"
         />
-        <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading">Refresh</v-btn>
+        <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading"
+          >Refresh</v-btn
+        >
       </v-layout>
     </v-flex>
     <v-flex xs12>
@@ -22,13 +24,19 @@
         :pagination.sync="pagination"
         :rows-per-page-items="[10, 25, 50, 100]"
       >
-        <v-progress-linear slot="progress" color="blue" indeterminate></v-progress-linear>
+        <v-progress-linear
+          slot="progress"
+          color="blue"
+          indeterminate
+        ></v-progress-linear>
 
         <template slot="items" slot-scope="props">
           <td class="shrink">
             <v-tooltip top>
-              <v-icon slot="activator">{{props.item.type | typeToIcon}}</v-icon>
-              <span>{{props.item.type}}</span>
+              <v-icon slot="activator">{{
+                props.item.type | typeToIcon
+              }}</v-icon>
+              <span>{{ props.item.type }}</span>
             </v-tooltip>
           </td>
           <td>{{ props.item.name }}</td>
@@ -43,7 +51,7 @@
                 icon
                 small
                 class="ma-0"
-                :to="'/datasets/'+props.item.name"
+                :to="'/datasets/' + props.item.name"
               >
                 <v-icon>mdi-file-find</v-icon>
               </v-btn>
@@ -72,7 +80,9 @@
         </template>
 
         <template slot="no-data">
-          <v-alert :value="true && !loading" color="error" icon="mdi-alert">No data available.</v-alert>
+          <v-alert :value="true && !loading" color="error" icon="mdi-alert"
+            >No data available.</v-alert
+          >
         </template>
       </v-data-table>
     </v-flex>
@@ -146,9 +156,7 @@ export default {
     async deleteDataset(dataset) {
       if (confirm(`Are you sure you want to delete ${name}?`)) {
         try {
-          await this.$http.delete(
-            `/api/v1/dataset/${dataset}`
-          );
+          await this.$http.delete(`/api/v1/dataset/${dataset}`);
           this.datasets = this.datasets.filter(t => t.name !== dataset);
         } catch (error) {
           this.error = true;

@@ -1,9 +1,10 @@
 <template>
   <v-card>
     <v-toolbar color="red" dark flat dense card>
-      <v-toolbar-title
-        class="subheading"
-      >Modify dataset - remove, fix missing, normalize or encode values</v-toolbar-title>
+      <v-toolbar-title class="subheading"
+        >Modify dataset - remove, fix missing, normalize or encode
+        values</v-toolbar-title
+      >
     </v-toolbar>
     <v-card-text>
       <v-form>
@@ -20,38 +21,69 @@
           </v-flex>
           <v-flex xs12 v-if="dataset">
             <v-badge v-if="canRemoveTotalCount > 0" color="red" overlap>
-              <span slot="badge">{{ removedCount }}/{{ canRemoveTotalCount }}</span>
-              <v-btn @click="removeAll" :flat="!removedAll" color="red" dark>Remove</v-btn>
+              <span slot="badge"
+                >{{ removedCount }}/{{ canRemoveTotalCount }}</span
+              >
+              <v-btn @click="removeAll" :flat="!removedAll" color="red" dark
+                >Remove</v-btn
+              >
             </v-badge>
 
             <v-badge v-if="canNormalizeTotalCount > 0" color="orange" overlap>
-              <span slot="badge">{{ normalizedCount }}/{{ canNormalizeTotalCount }}</span>
-              <v-btn @click="normalizeAll" :flat="!normalizedAll" color="orange" dark>Normalize</v-btn>
+              <span slot="badge"
+                >{{ normalizedCount }}/{{ canNormalizeTotalCount }}</span
+              >
+              <v-btn
+                @click="normalizeAll"
+                :flat="!normalizedAll"
+                color="orange"
+                dark
+                >Normalize</v-btn
+              >
             </v-badge>
 
-            <v-badge v-if="canFixMissingValueTotalCount > 0" color="green" overlap>
-              <span slot="badge">{{ fixedMissingValueCount }}/{{ canFixMissingValueTotalCount }}</span>
+            <v-badge
+              v-if="canFixMissingValueTotalCount > 0"
+              color="green"
+              overlap
+            >
+              <span slot="badge"
+                >{{ fixedMissingValueCount }}/{{
+                  canFixMissingValueTotalCount
+                }}</span
+              >
               <v-btn
                 @click="missingValuesFixAll"
                 :flat="!missingValuesFixedAll"
                 color="green"
                 dark
-              >Fix missing values</v-btn>
+                >Fix missing values</v-btn
+              >
             </v-badge>
 
             <v-badge v-if="canEncodeTotalCount > 0" color="blue" overlap>
-              <span slot="badge">{{ encodedCount }}/{{ canEncodeTotalCount }}</span>
-              <v-btn @click="encodeAll" :flat="!encodedAll" color="blue" dark>Encode</v-btn>
+              <span slot="badge"
+                >{{ encodedCount }}/{{ canEncodeTotalCount }}</span
+              >
+              <v-btn @click="encodeAll" :flat="!encodedAll" color="blue" dark
+                >Encode</v-btn
+              >
             </v-badge>
           </v-flex>
-          <v-flex xs12 row v-for="(column) in columns" :key="column.name">
-            <v-subheader class="pa-0">{{ column.name }} ({{ column.type }})</v-subheader>
+          <v-flex xs12 row v-for="column in columns" :key="column.name">
+            <v-subheader class="pa-0"
+              >{{ column.name }} ({{ column.type }})</v-subheader
+            >
             <!-- Remove -->
-            <v-switch v-model="column.remove" label="Remove" color="red"/>
+            <v-switch v-model="column.remove" label="Remove" color="red" />
             <!-- Normalize -->
             <v-layout row v-if="canNormalize(column)">
               <v-flex shrink>
-                <v-switch v-model="column.normalize" label="Normalize" color="orange"/>
+                <v-switch
+                  v-model="column.normalize"
+                  label="Normalize"
+                  color="orange"
+                />
               </v-flex>
               <v-flex shrink>
                 <v-text-field
@@ -75,19 +107,37 @@
             <!-- Missing values -->
             <v-layout row v-if="canFixNA(column)">
               <v-flex shrink>
-                <v-switch v-model="column.na" label="Fix missing values" color="green"/>
+                <v-switch
+                  v-model="column.na"
+                  label="Fix missing values"
+                  color="green"
+                />
               </v-flex>
               <v-flex shrink>
-                <v-radio-group v-if="column.na" v-model="column.naMethod" row class="pl-3">
-                  <v-radio v-if="isNumber(column)" label="Using 0" value="zero" color="green"/>
+                <v-radio-group
+                  v-if="column.na"
+                  v-model="column.naMethod"
+                  row
+                  class="pl-3"
+                >
+                  <v-radio
+                    v-if="isNumber(column)"
+                    label="Using 0"
+                    value="zero"
+                    color="green"
+                  />
                   <v-radio
                     v-if="isNumber(column)"
                     label="Using average"
                     value="average"
                     color="green"
                   />
-                  <v-radio label="Using the most common" value="common" color="green"/>
-                  <v-radio label="Custom" value="custom" color="green"/>
+                  <v-radio
+                    label="Using the most common"
+                    value="common"
+                    color="green"
+                  />
+                  <v-radio label="Custom" value="custom" color="green" />
                 </v-radio-group>
               </v-flex>
               <v-flex shrink>
@@ -104,19 +154,36 @@
             <!-- Categorical -->
             <v-layout row v-if="canEncode(column)">
               <v-flex shrink>
-                <v-switch v-model="column.encode" label="Encode" color="blue"/>
+                <v-switch v-model="column.encode" label="Encode" color="blue" />
               </v-flex>
               <v-flex shrink>
-                <v-radio-group v-if="column.encode" v-model="column.encodeMethod" row class="pl-3">
-                  <v-radio label="Label/Integer encoding" value="label" color="blue"/>
-                  <v-radio label="One-Hot encoding" value="oneHot" color="blue"/>
+                <v-radio-group
+                  v-if="column.encode"
+                  v-model="column.encodeMethod"
+                  row
+                  class="pl-3"
+                >
+                  <v-radio
+                    label="Label/Integer encoding"
+                    value="label"
+                    color="blue"
+                  />
+                  <v-radio
+                    label="One-Hot encoding"
+                    value="oneHot"
+                    color="blue"
+                  />
                 </v-radio-group>
               </v-flex>
             </v-layout>
           </v-flex>
           <v-flex xs12 v-if="dataset">
             <v-layout>
-              <v-checkbox v-model="useNewDatasetName" hide-details class="shrink"/>
+              <v-checkbox
+                v-model="useNewDatasetName"
+                hide-details
+                class="shrink"
+              />
               <v-text-field
                 v-model="newDatasetName"
                 :disabled="!useNewDatasetName"
@@ -124,7 +191,11 @@
               />
             </v-layout>
             <v-layout>
-              <v-checkbox v-model="useConfigurationName" hide-details class="shrink"/>
+              <v-checkbox
+                v-model="useConfigurationName"
+                hide-details
+                class="shrink"
+              />
               <v-text-field
                 v-model="configurationName"
                 :disabled="!useConfigurationName"
@@ -134,30 +205,40 @@
           </v-flex>
           <v-flex xs12 v-if="dataset">
             <v-alert
-              :value="done && useNewDatasetName && this.newDatasetName.length !== 0"
+              :value="
+                done && useNewDatasetName && this.newDatasetName.length !== 0
+              "
               type="success"
               transition="scale-transition"
             >
-              Dataset
-              <strong>{{ newDatasetName }}</strong>
-              has been successfully created.
+              Dataset <strong>{{ newDatasetName }}</strong> has been
+              successfully created.
             </v-alert>
             <v-alert
-              :value="done && useConfigurationName && this.configurationName.length !== 0"
+              :value="
+                done &&
+                  useConfigurationName &&
+                  this.configurationName.length !== 0
+              "
               type="success"
               transition="scale-transition"
             >
-              Configuration
-              <strong>{{ configurationName }}</strong>
-              has been successfully created.
+              Configuration <strong>{{ configurationName }}</strong> has been
+              successfully created.
             </v-alert>
-            <v-alert :value="submitError" type="error" transition="scale-transition">Server error.</v-alert>
+            <v-alert
+              :value="submitError"
+              type="error"
+              transition="scale-transition"
+              >Server error.</v-alert
+            >
             <v-btn
               :disabled="disableSubmit"
               :loading="submitLoading"
               @click="submit"
               color="primary"
-            >Submit</v-btn>
+              >Submit</v-btn
+            >
           </v-flex>
         </v-layout>
       </v-form>
