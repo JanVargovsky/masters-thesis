@@ -57,12 +57,12 @@
               </v-btn>
               <span>Open</span>
             </v-tooltip>
-            <v-tooltip top>
+            <!-- <v-tooltip top>
               <v-btn slot="activator" fab icon small class="ma-0">
                 <v-icon>mdi-pencil</v-icon>
               </v-btn>
               <span>Edit</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip top>
               <v-btn
                 slot="activator"
