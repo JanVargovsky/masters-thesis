@@ -1,7 +1,7 @@
 <template>
   <v-card>
     <v-toolbar color="indigo" dark flat dense card>
-      <v-toolbar-title class="subheading">Dataset upload</v-toolbar-title>
+      <v-toolbar-title class="subheading">Upload dataset</v-toolbar-title>
     </v-toolbar>
     <v-card-text>
       <v-form>

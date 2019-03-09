@@ -3,6 +3,8 @@ import io
 
 import matplotlib.pyplot as plt
 import numpy as np
+# noinspection PyUnresolvedReferences
+from mpl_toolkits.mplot3d import Axes3D  # Register Axes3D as 3d projection
 
 
 def plot_to_base64():
@@ -95,3 +97,27 @@ def plot_classification_predictions(expected_predictions, actual_predictions,
 
     plt.title("Predictions")
     plt.legend()
+
+
+def plot_generated_dataset(x, y):
+    dim = x.shape[1]
+    # 1d or 2d
+    if dim == 1 or dim == 2:
+        plt.title("Preview")
+        plt.xlabel('X')
+        x0 = x[:, 0]
+        if dim == 1:
+            x1 = np.zeros_like(x0)
+            plt.yticks([])
+        else:
+            x1 = x[:, 1]
+            plt.ylabel("Y")
+        plt.scatter(x0, x1, marker='o', c=y, s=25, edgecolor='k')
+    # 3d
+    else:
+        ax = plt.axes(projection='3d')
+        ax.scatter(x[:, 0], x[:, 1], x[:, 2], marker='o', c=y, s=25, edgecolor='k')
+        ax.set_title("Preview")
+        ax.set_xlabel('X')
+        ax.set_ylabel('Y')
+        ax.set_zlabel('Z')

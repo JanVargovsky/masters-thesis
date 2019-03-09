@@ -5,6 +5,7 @@ import Home from "./views/Home.vue";
 import About from "./views/About.vue";
 
 import DatasetUpload from "./views/datasets/Upload.vue";
+import DatasetGenerate from "./views/datasets/Generate.vue";
 import DatasetList from "./views/datasets/List.vue";
 import DatasetDetail from "./views/datasets/Detail.vue";
 import DatasetConfigurations from "./views/datasets/Configurations.vue";
@@ -36,6 +37,10 @@ export default new Router({
     {
       path: "/datasets/upload",
       component: DatasetUpload
+    },
+    {
+      path: "/datasets/generate",
+      component: DatasetGenerate
     },
     {
       path: "/datasets/configurations",

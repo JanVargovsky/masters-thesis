@@ -39,8 +39,10 @@
 
     <v-toolbar color="primary" dark fixed clipped-left app>
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <v-icon class="ml-3">mdi-database-search</v-icon>
-      <v-toolbar-title>Dataset Analyser</v-toolbar-title>
+      <router-link to="/">
+        <v-icon class="ml-3">mdi-database-search</v-icon>
+      </router-link>
+      <v-toolbar-title> Dataset Analyser </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -72,8 +74,13 @@ export default {
           items: [
             {
               title: "Upload",
-              icon: "mdi-database-plus",
+              icon: "mdi-file-upload",
               link: "/datasets/upload"
+            },
+            {
+              title: "Generate",
+              icon: "mdi-database-plus",
+              link: "/datasets/generate"
             },
             {
               title: "List",
@@ -82,7 +89,7 @@ export default {
             },
             {
               title: "Preprocessing",
-              icon: "mdi-settings-outline",
+              icon: "mdi-cogs",
               link: "/preprocessing"
             },
             {
