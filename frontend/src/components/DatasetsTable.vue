@@ -11,7 +11,7 @@
           prepend-icon="mdi-database-search"
         />
         <v-btn color="primary" class="mb-0" @click="refresh" :loading="loading"
-          >Refresh</v-btn
+          >Refresh <v-icon right>mdi-database-refresh</v-icon></v-btn
         >
       </v-layout>
     </v-flex>

@@ -46,6 +46,7 @@
 
       <v-spacer></v-spacer>
 
+      <refresh-datasets />
       <settings-modal />
     </v-toolbar>
 
@@ -57,11 +58,13 @@
 
 <script>
 import SettingsModal from "./views/settings/SettingsModal";
+import RefreshDatasets from "./views/settings/RefreshDatasets";
 
 export default {
   name: "App",
   components: {
-    SettingsModal
+    SettingsModal,
+    RefreshDatasets
   },
   data() {
     return {
