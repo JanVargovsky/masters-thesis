@@ -166,6 +166,13 @@
             >Server error.</v-alert
           >
           <v-alert
+            :value="type && type.preview.plot"
+            type="info"
+            transition="scale-transition"
+            >Don't like it? <strong>Try it once more.</strong> Preview generates
+            <strong>always new</strong> dataset.
+          </v-alert>
+          <v-alert
             :value="highDimension"
             type="info"
             transition="scale-transition"
