@@ -76,12 +76,13 @@
                     <v-list-tile-content>Mean:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{
                       props.item.descriptiveStatistics.mean
+                        | autoRoundMean(props.item.descriptiveStatistics.std)
                     }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
                     <v-list-tile-content>Std:</v-list-tile-content>
                     <v-list-tile-content class="align-end">{{
-                      props.item.descriptiveStatistics.std
+                      props.item.descriptiveStatistics.std | autoRoundStd
                     }}</v-list-tile-content>
                   </v-list-tile>
                   <v-list-tile>
@@ -204,6 +205,24 @@ export default {
     configuration: async function() {
       if (this.configuration && this.configuration.length > 0)
         await this.loadView();
+    }
+  },
+  filters: {
+    autoRoundStd: function(value) {
+      const digits = parseInt(value).toString().length;
+      return +value.toFixed(digits > 1 ? 0 : 2);
+    },
+    autoRoundMean: function(value, std) {
+      const decimal = parseInt(value);
+      const digits = decimal.toString().length;
+      const stdDigits = parseInt(std).toString().length;
+      let fractionDigits;
+      if (digits > stdDigits) fractionDigits = 0;
+      else if (decimal === 0) fractionDigits = 3;
+      else if (digits === 1) fractionDigits = 2;
+      else fractionDigits = stdDigits - digits;
+
+      return +value.toFixed(fractionDigits);
     }
   }
 };
