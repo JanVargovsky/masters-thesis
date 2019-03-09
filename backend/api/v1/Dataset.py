@@ -4,7 +4,7 @@ from flask_restplus import Namespace, Resource
 
 from infrastructure import datasets_path
 from infrastructure.DatasetUtils import get_dataset, get_dataset_rows, delete_dataset
-from infrastructure.PlotUtils import plot_histogram, plot_to_base64
+from infrastructure.PlotUtils import plot_histogram, plot_to_base64, plot_box_and_violin
 from infrastructure.Preprocessing import modify
 from infrastructure.PreprocessingConfiguration import load_configuration, get_configurations, delete_configuration
 from infrastructure.StatisticsCache import store, try_load
@@ -90,16 +90,20 @@ class DatasetStatistics(Resource):
                     "unique": int(describe["unique"])
                 }
 
+            plots = {}
             plot_histogram(series, column_name, is_numeric)
-            histogram = plot_to_base64()
+            plots['histogram'] = plot_to_base64()
+
+            if is_numeric:
+                plot_box_and_violin(series)
+                plots['boxplot'] = plot_to_base64()
 
             columns.append({
                 "name": column_name,
                 "type": series.dtype.name,
                 "numeric": is_numeric,
                 "descriptiveStatistics": descriptive_statistics,
-                "histogramType": "base64",
-                "histogram": histogram
+                "plots": plots
             })
 
         result = {

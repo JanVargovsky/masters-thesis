@@ -29,6 +29,15 @@ def plot_histogram(series, column_name, is_numeric):
             plt.bar(str(value), count)
 
 
+def plot_box_and_violin(series):
+    series = series.dropna()
+    plt.violinplot(series)
+    plt.boxplot(series)
+    plt.title("{} boxplot".format(series.name))
+    plt.xticks([])
+    plt.ylabel(series.name)
+
+
 def plot_history_accuracy(history):
     plt.plot(history.history['acc'], label="Train")
     if "val_acc" in history.history:

@@ -133,8 +133,9 @@
                 <v-divider />
 
                 <v-img
-                  v-if="props.item.histogramType === 'base64'"
-                  :src="'data:image/jpeg;base64,' + props.item.histogram"
+                  v-for="(image, type) in props.item.plots"
+                  :key="type"
+                  :src="'data:image/jpeg;base64,' + image"
                 />
               </v-card>
             </v-flex>
