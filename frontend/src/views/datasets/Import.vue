@@ -22,22 +22,13 @@
             <v-text-field v-model="datasetName" label="Dataset name" />
           </v-flex>
           <v-flex xs12>
-            <v-layout>
-              <v-btn
-                @click="fetchOpenMLDetails"
-                :disabled="!canFetch"
-                :loading="fetchLoading"
-                color="success"
-                >Details</v-btn
-              >
-              <v-btn
-                @click="submitImport"
-                :disabled="!canSubmit"
-                :loading="importLoading"
-                color="primary"
-                >Import</v-btn
-              >
-            </v-layout>
+            <v-btn
+              @click="submitImport"
+              :disabled="!canSubmit"
+              :loading="importLoading"
+              color="primary"
+              >Import</v-btn
+            >
           </v-flex>
           <v-flex xs12>
             <v-alert :value="error" type="error" transition="scale-transition"
@@ -48,12 +39,42 @@
               successfully uploaded.
             </v-alert>
           </v-flex>
+          <v-progress-linear
+            v-if="fetchLoading"
+            slot="progress"
+            color="blue"
+          ></v-progress-linear>
           <v-flex xs12 v-if="datasetDetails">
-            Raw details:
-            <pre
-              >{{ datasetDetails }}
-              </pre
-            >
+            <v-list subheader>
+              <v-subheader>Details</v-subheader>
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>Id</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.id" />
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>Name</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.name" />
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>Version</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.version" />
+                </v-list-tile-content>
+              </v-list-tile>
+
+              <v-list-tile>
+                <v-list-tile-content>
+                  <v-list-tile-title>Licence</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.licence" />
+                </v-list-tile-content>
+              </v-list-tile>
+            </v-list>
           </v-flex>
         </v-layout>
       </v-form>
@@ -88,9 +109,11 @@ export default {
       if (index == -1) return;
 
       const id = value.substring(index + baseUrl.length);
-      if (parseInt(id) !== Math.NaN) this.$nextTick(() => (this.dataId = id));
+      if (Number.isInteger(Number(id)))
+        this.$nextTick(() => (this.dataId = id));
     },
     async submitImport() {
+      this.error = false;
       try {
         this.importLoading = true;
         this.done = false;
@@ -106,15 +129,15 @@ export default {
       }
     },
     async fetchOpenMLDetails() {
+      this.error = false;
+      if (!this.canFetch) return;
       try {
         this.fetchLoading = true;
         const response = await this.$http.get(
           `/api/v1/dataset-import/openml/${this.dataId}`
         );
-        this.datasetDetails = response.data;
-
-        this.datasetName =
-          this.datasetDetails.data_set_description.name + ".csv";
+        this.datasetDetails = response.data.data_set_description;
+        this.datasetName = this.datasetDetails.name + ".csv";
       } catch {
         this.error = true;
         this.datasetDetails = undefined;
@@ -128,7 +151,18 @@ export default {
       return this.dataId && isDatasetNameValid(this.datasetName);
     },
     canFetch: function() {
-      return this.dataId && parseInt(this.dataId) !== Math.NaN;
+      return this.dataId && Number.isInteger(Number(this.dataId));
+    }
+  },
+  created: function() {
+    this.debouncedFetchOpenMLDetails = this.$_.debounce(
+      this.fetchOpenMLDetails,
+      1000
+    );
+  },
+  watch: {
+    dataId: function() {
+      this.debouncedFetchOpenMLDetails();
     }
   }
 };

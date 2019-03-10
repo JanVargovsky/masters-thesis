@@ -6,6 +6,7 @@ import router from "./router";
 import "roboto-fontface/css/roboto/roboto-fontface.css";
 import "@mdi/font/css/materialdesignicons.css";
 import "./plugins/axios";
+import "./plugins/lodash";
 
 Vue.config.productionTip = false;
 
