@@ -81,6 +81,11 @@ export default {
               link: "/datasets/upload"
             },
             {
+              title: "Import",
+              icon: "mdi-database-import",
+              link: "/datasets/import"
+            },
+            {
               title: "Generate",
               icon: "mdi-database-plus",
               link: "/datasets/generate"

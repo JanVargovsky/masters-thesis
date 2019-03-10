@@ -47,6 +47,10 @@ export default {
               name: "Upload"
             },
             {
+              to: "/datasets/import",
+              name: "Import"
+            },
+            {
               to: "/datasets/generate",
               name: "Generate"
             }
