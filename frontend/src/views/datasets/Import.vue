@@ -62,6 +62,8 @@
 </template>
 
 <script>
+import { isDatasetNameValid } from "@/infrastructure/dataset";
+
 export default {
   data() {
     return {
@@ -122,10 +124,10 @@ export default {
     }
   },
   computed: {
-    canSubmit() {
-      return this.dataId && this.datasetName && this.datasetName.length > 0;
+    canSubmit: function() {
+      return this.dataId && isDatasetNameValid(this.datasetName);
     },
-    canFetch() {
+    canFetch: function() {
       return this.dataId && parseInt(this.dataId) !== Math.NaN;
     }
   }

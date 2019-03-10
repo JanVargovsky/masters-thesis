@@ -247,7 +247,8 @@
 </template>
 
 <script>
-import store from "../../store.js";
+import store from "@/store.js";
+import { isDatasetNameValid } from "@/infrastructure/dataset";
 
 export default {
   data() {
@@ -419,7 +420,7 @@ export default {
   computed: {
     disableSubmit() {
       if (!this.useNewDatasetName && !this.useConfigurationName) return true;
-      if (this.useNewDatasetName && this.newDatasetName.length === 0)
+      if (this.useNewDatasetName && !isDatasetNameValid(this.newDatasetName))
         return true;
       if (this.useConfigurationName && this.configurationName.length === 0)
         return true;

@@ -195,6 +195,8 @@
 </template>
 
 <script>
+import { isDatasetNameValid } from "@/infrastructure/dataset";
+
 export default {
   data() {
     return {
@@ -379,15 +381,8 @@ export default {
     },
     isValidDatasetName: function() {
       if (!this.type) return false;
-      if (!this.type.datasetName) return false;
-
-      const datasetName = this.type.datasetName;
-      const index = datasetName.lastIndexOf(".");
-      if (index == -1) return false;
-
-      const name = datasetName.substr(0, index);
-      const extension = datasetName.substr(index);
-      return name.length > 0 && extension.length > 1;
+      if (!isDatasetNameValid(this.type.datasetName)) return false;
+      return true;
     }
   }
 };
