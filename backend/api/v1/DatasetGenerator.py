@@ -39,6 +39,7 @@ class DatasetGeneratorBase(Resource):
         random_state = self._get_random_state()
         x, y = self._generate(random_state)
         df = pd.DataFrame(x)
+        df.columns = df.columns.astype(str)
         df['class'] = y
 
         save_dataset(df, name)
