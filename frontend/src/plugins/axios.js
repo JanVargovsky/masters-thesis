@@ -1,7 +1,9 @@
 import Vue from "vue";
 import axios from "axios";
 
-Vue.prototype.$http = axios;
+Vue.prototype.$http = axios.create({
+  timeout: 0
+});
 
 // if (process.env.NODE_ENV === "production") {
 //   Vue.prototype.$http = axios;
