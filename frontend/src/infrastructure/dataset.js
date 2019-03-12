@@ -1,4 +1,16 @@
-const extensions = [".csv", ".txt", ".xlsx", ".xlsm"];
+export const extensions = [
+  ".csv",
+  ".txt",
+  ".xlsx",
+  ".xlsm",
+  ".pickle",
+  ".feather",
+  ".parquet",
+  ".hdf",
+  ".hdf5",
+  ".h5"
+];
+export const defaultExtension = ".parquet";
 
 function isValidDatasetExtension(extension) {
   return extensions.includes(extension);

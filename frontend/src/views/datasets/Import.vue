@@ -49,15 +49,15 @@
               <v-subheader>Details</v-subheader>
               <v-list-tile>
                 <v-list-tile-content>
-                  <v-list-tile-title>Id</v-list-tile-title>
-                  <v-list-tile-sub-title v-text="datasetDetails.id" />
+                  <v-list-tile-title>Name</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.name" />
                 </v-list-tile-content>
               </v-list-tile>
 
               <v-list-tile>
                 <v-list-tile-content>
-                  <v-list-tile-title>Name</v-list-tile-title>
-                  <v-list-tile-sub-title v-text="datasetDetails.name" />
+                  <v-list-tile-title>Id</v-list-tile-title>
+                  <v-list-tile-sub-title v-text="datasetDetails.id" />
                 </v-list-tile-content>
               </v-list-tile>
 
@@ -83,7 +83,7 @@
 </template>
 
 <script>
-import { isDatasetNameValid } from "@/infrastructure/dataset";
+import { isDatasetNameValid, defaultExtension } from "@/infrastructure/dataset";
 
 export default {
   data() {
@@ -137,7 +137,7 @@ export default {
           `/api/v1/dataset-import/openml/${this.dataId}`
         );
         this.datasetDetails = response.data.data_set_description;
-        this.datasetName = this.datasetDetails.name + ".csv";
+        this.datasetName = this.datasetDetails.name + defaultExtension;
       } catch {
         this.error = true;
         this.datasetDetails = undefined;

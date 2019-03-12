@@ -14,14 +14,12 @@
               prepend-icon="mdi-database"
               clearable
               @click:clear="reset"
-              hint="CSV or Excel file"
-              persistent-hint
             />
             <input
               type="file"
               hidden
               ref="dataset"
-              accept=".csv, .xlsx, .xlsm"
+              :accept="acceptedDatasetExtensions"
               @change="onChange"
             />
           </v-flex>
@@ -50,6 +48,8 @@
 </template>
 
 <script>
+import { extensions } from "@/infrastructure/dataset";
+
 export default {
   data() {
     return {
@@ -96,6 +96,11 @@ export default {
     reset() {
       this.done = false;
       this.error = false;
+    }
+  },
+  computed: {
+    acceptedDatasetExtensions: function() {
+      return extensions.join(",");
     }
   }
 };

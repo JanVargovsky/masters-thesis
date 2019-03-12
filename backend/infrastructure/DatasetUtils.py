@@ -12,7 +12,11 @@ from infrastructure.FileUtils import get_extension
 supported_types = {
     'csv': ['csv'],
     'text': ['txt'],
-    'excel': ['xlsx', 'xlsm']
+    'excel': ['xlsx', 'xlsm'],
+    'pickle': ['pickle'],
+    'feather': ['feather'],
+    'parquet': ['parquet'],
+    'hdf': ['hdf', 'hdf5', 'h5']
 }
 
 
@@ -40,6 +44,14 @@ def get_dataset(name, nrows=None, fillna=False):
         df = pd.read_csv(path, sep=None, nrows=nrows, engine='python')
     elif file_type == 'excel':
         df = pd.read_excel(path, nrows=nrows)
+    elif file_type == 'pickle':
+        df = pd.read_pickle(path)[:nrows]
+    elif file_type == 'feather':
+        df = pd.read_feather(path)[:nrows]
+    elif file_type == 'parquet':
+        df = pd.read_parquet(path)[:nrows]
+    elif file_type == 'hdf':
+        df = pd.read_hdf(path)[:nrows]
     else:
         raise Exception("Unknown dataset type")
 
@@ -55,6 +67,14 @@ def save_dataset(dataset, name):
         dataset.to_csv(path, index=False)
     elif file_type == 'excel':
         dataset.to_excel(path, index=False)
+    elif file_type == 'pickle':
+        dataset.to_pickle(path)
+    elif file_type == 'feather':
+        dataset.to_feather(path)
+    elif file_type == 'parquet':
+        dataset.to_parquet(path)
+    elif file_type == 'hdf':
+        dataset.to_hdf(path, 'df')
     else:
         raise Exception("Unknown dataset type")
 
@@ -70,11 +90,9 @@ def get_dataset_rows(name):
     if file_type == 'csv':
         with open(path) as f:
             return sum(1 for _ in f) - 1
-    elif file_type == 'excel':
-        df = pd.read_excel(path)
-        return len(df)
     else:
-        raise Exception("Unknown dataset type")
+        df = get_dataset(name)
+        return len(df)
 
 
 def _get_creation_timestamp(stat):

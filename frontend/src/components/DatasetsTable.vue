@@ -134,6 +134,10 @@ export default {
       if (value === "csv") return "mdi-file-delimited";
       if (value === "excel") return "mdi-file-excel";
       if (value === "text") return "mdi-file-document";
+      if (value === "pickle") return "mdi-alpha-p-box";
+      if (value === "feather") return "mdi-feather";
+      if (value === "parquet") return "mdi-format-columns";
+      if (value === "hdf") return "mdi-format-header-5";
       return "mdi-file";
     }
   },
