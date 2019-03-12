@@ -12,4 +12,4 @@ COPY backend .
 
 RUN pip install -r requirements.txt
 
-CMD [ "gunicorn", "-w", "4", "-b", ":5000", "app:app" ]
+CMD [ "gunicorn", "-w", "4", "-b", ":5000", "--log-level", "debug", "--timeout", "3600", "app:app" ]
