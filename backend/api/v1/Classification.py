@@ -1,6 +1,7 @@
 from flask_restplus import Namespace, Resource, fields
 from tensorflow import keras
 from sklearn.utils import shuffle
+from collections import OrderedDict
 
 from infrastructure.Classification import ClassificationModel
 from infrastructure.DatasetUtils import get_dataset
@@ -52,11 +53,11 @@ class ClassificationTestRun(Resource):
         keras.backend.clear_session()
         model = ClassificationModel(input_dim, output_dim, layers)
 
-        history = model.fit(x=data_x, y=data_y, epochs=epochs, verbose=0, validation_split=validation_split)
+        history = model.fit(x=data_x, y=data_y, epochs=epochs, verbose=2, validation_split=validation_split)
         predicts = model.predict_classes(data_x)
         score = float((data_y == predicts).sum() / predicts.size)
 
-        plots = {}
+        plots = OrderedDict()
 
         plot_history_accuracy(history)
         plots['accuracy'] = plot_to_base64()
