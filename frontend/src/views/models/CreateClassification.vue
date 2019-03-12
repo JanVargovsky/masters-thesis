@@ -362,7 +362,9 @@ export default {
       this.loadingConfigurations = false;
     },
     async loadColumns() {
-      const response = await this.$http.get(`/api/v1/dataset/${this.dataset}`);
+      const response = await this.$http.get(
+        `/api/v1/dataset/${this.dataset}/5`
+      );
       const data = response.data;
       this.datasetColumns = data.columns.map((name, index) => ({
         name,
