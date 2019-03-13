@@ -40,7 +40,7 @@ export default {
           description:
             "We need a data to operate on. Upload a new dataset with your data.",
           color: "indigo",
-          icon: "mdi-database-plus",
+          icon: "mdi-database",
           links: [
             {
               to: "/datasets/upload",
@@ -61,7 +61,7 @@ export default {
           description:
             "We need a clean data, without any missing values or outlayers. Use preprocessing to remove those defects.",
           color: "red",
-          icon: "mdi-settings-outline",
+          icon: "mdi-cogs",
           links: [
             {
               to: "/preprocessing/modify",

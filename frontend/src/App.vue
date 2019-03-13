@@ -114,7 +114,7 @@ export default {
         },
         {
           title: "Models",
-          icon: "mdi-cube",
+          icon: "mdi-cube-outline",
           items: [
             {
               title: "Create classification",
