@@ -88,14 +88,26 @@ export default {
         },
         {
           title: "Create model",
-          description:
-            "Create a model for your data. See how accurate it is against an unseen data.",
+          description: "Create a model for your data.",
           color: "teal",
           icon: "mdi-cube-outline",
           links: [
             {
               to: "/models/create-classification",
               name: "Classification"
+            }
+          ]
+        },
+        {
+          title: "Make predictions",
+          description:
+            "Test your model against an unseen data and see how accurate it is.",
+          color: "purple",
+          icon: "mdi-flask-outline",
+          links: [
+            {
+              to: "/models/predict",
+              name: "Predict"
             }
           ]
         }

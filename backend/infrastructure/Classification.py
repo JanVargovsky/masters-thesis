@@ -1,5 +1,11 @@
+import json
+import os
+import shutil
+from pathlib import Path
+
 from tensorflow import keras
-from sklearn.model_selection import KFold
+
+from infrastructure import classification_models_path
 
 
 class ClassificationModel:
@@ -17,6 +23,9 @@ class ClassificationModel:
 
         self.model = model
 
+    def __del__(self):
+        del self.model
+
     def fit(self, **kwargs):
         return self.model.fit(**kwargs)
 
@@ -26,3 +35,40 @@ class ClassificationModel:
 
     def predict_classes(self, x, **kwargs):
         return self.model.predict_classes(x, **kwargs)
+
+    def save(self, name):
+        self.model.save(name)
+
+    @staticmethod
+    def load(name):
+        instance = ClassificationModel.__new__(ClassificationModel)
+        instance.model = keras.models.load_model(name)
+        return instance
+
+
+def save_model(model, name, metadata):
+    path = classification_models_path + name
+    Path(path).mkdir(parents=True, exist_ok=True)
+
+    model.save(path + '/model.h5')
+    with open(path + '/metadata.json', 'w') as f:
+        json.dump(metadata, f, indent=2)
+
+
+def load_model(name):
+    path = classification_models_path + name + '/model.h5'
+    return ClassificationModel.load(path)
+
+
+def load_model_metadata(name):
+    path = classification_models_path + name + '/metadata.json'
+    with open(path, 'r') as f:
+        return json.load(f)
+
+
+def get_model_names():
+    return next(os.walk(classification_models_path))[1]
+
+
+def remove_model(name):
+    shutil.rmtree(classification_models_path + name)

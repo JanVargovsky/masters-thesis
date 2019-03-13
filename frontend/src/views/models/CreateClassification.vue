@@ -52,6 +52,9 @@
             ></v-overflow-btn>
           </v-flex>
           <v-flex xs12 v-if="dataset">
+            <v-text-field v-model="modelName" label="Model name" />
+          </v-flex>
+          <v-flex xs12 v-if="dataset">
             <v-tabs v-model="tabs" grow slider-color="primary">
               <v-tab>Simple</v-tab>
               <v-tab-item>
@@ -295,12 +298,25 @@
                 dark
                 >Test run</v-btn
               >
-              <v-btn color="primary">Create</v-btn>
+              <v-btn
+                @click="create"
+                :loading="createLoading"
+                :disabled="!modelName"
+                color="primary"
+                >Create</v-btn
+              >
             </v-layout>
           </v-flex>
           <v-flex xs12>
             <v-alert :value="error" type="error" transition="scale-transition"
               >Server error.</v-alert
+            >
+            <v-alert
+              :value="createdModel"
+              type="success"
+              transition="scale-transition"
+              >Model <strong>{{ createdModel }}</strong> has been successfully
+              created.</v-alert
             >
           </v-flex>
           <v-flex xs12 v-if="score">
@@ -326,6 +342,7 @@
 
 <script>
 import store from "../../store.js";
+import { scoreToIcon } from "@/infrastructure/model";
 
 export default {
   data() {
@@ -334,6 +351,7 @@ export default {
       dataset: undefined,
       datasetColumns: [],
       labelColumn: undefined,
+      modelName: undefined,
 
       configurations: [],
       useConfiguration: false,
@@ -348,6 +366,8 @@ export default {
 
       error: false,
       testRunLoading: false,
+      createLoading: false,
+      createdModel: undefined,
       score: undefined,
       plots: []
     };
@@ -439,6 +459,7 @@ export default {
     async testRun() {
       try {
         this.error = false;
+        this.createdModel = undefined;
         this.testRunLoading = true;
         const payload = {
           dataset: this.dataset,
@@ -466,6 +487,39 @@ export default {
         this.plots = [];
       }
       this.testRunLoading = false;
+    },
+    async create() {
+      try {
+        this.error = false;
+        this.createdModel = undefined;
+        this.createLoading = true;
+        const payload = {
+          dataset: this.dataset,
+          labelColumn: this.labelColumn,
+          epochs: parseInt(this.epochs),
+          layers: this.layers
+        };
+
+        if (this.useConfiguration && this.configuration)
+          payload.configuration = this.configuration;
+
+        const validationSplit = parseFloat(this.validationSplit);
+        if (!isNaN(validationSplit)) payload.validationSplit = validationSplit;
+
+        const response = await this.$http.post(
+          `/api/v1/classification/${this.modelName}`,
+          payload
+        );
+        const data = response.data;
+        this.createdModel = this.modelName;
+        this.score = data.score;
+        this.plots = data.plots;
+      } catch {
+        this.error = true;
+        this.score = undefined;
+        this.plots = [];
+      }
+      this.createLoading = false;
     }
   },
   watch: {
@@ -477,11 +531,7 @@ export default {
   },
   computed: {
     scoreIcon: function() {
-      if (this.score < 0.3) return "mdi-emoticon-dead";
-      if (this.score < 0.5) return "mdi-emoticon-sad";
-      if (this.score < 0.7) return "mdi-emoticon-neutral";
-      if (this.score < 0.9) return "mdi-emoticon-happy";
-      return "mdi-emoticon-excited";
+      return scoreToIcon(this.score);
     },
     layersDisplay: function() {
       if (this.layers.length == 0) return "No layers!";

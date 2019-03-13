@@ -140,12 +140,10 @@
           </v-flex>
         </template>
         <v-flex xs12 v-if="typeName">
-          <v-flex xs12>
-            <v-text-field
-              v-model="type.datasetName"
-              label="Name of generated dataset"
-            />
-          </v-flex>
+          <v-text-field
+            v-model="type.datasetName"
+            label="Name of generated dataset"
+          />
         </v-flex>
         <v-flex xs12 v-if="type">
           <v-layout>

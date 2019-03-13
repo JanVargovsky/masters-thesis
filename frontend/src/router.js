@@ -17,7 +17,8 @@ import PreprocessingSplit from "./views/preprocessing/Split.vue";
 import PreprocessingModify from "./views/preprocessing/Modify.vue";
 
 import CreateClassificationModel from "./views/models/CreateClassification.vue";
-import Models from "./views/Models.vue";
+import ModelList from "./views/models/List.vue";
+import ModelPredict from "./views/models/Predict.vue";
 
 Vue.use(Router);
 
@@ -78,7 +79,11 @@ export default new Router({
     },
     {
       path: "/models/list",
-      component: Models
+      component: ModelList
+    },
+    {
+      path: "/models/predict",
+      component: ModelPredict
     },
     {
       path: "*",

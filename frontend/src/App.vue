@@ -26,6 +26,7 @@
               v-for="item in item.items"
               :key="item.to"
               :to="item.link"
+              :disabled="item.disabled"
             >
               <v-list-tile-action>
                 <v-icon>{{ item.icon }}</v-icon>
@@ -124,9 +125,15 @@ export default {
             {
               title: "Create clustering",
               icon: "mdi-chart-bubble",
-              link: "/models/create-clustering"
+              link: "/models/create-clustering",
+              disabled: true
             },
-            { title: "List", icon: "mdi-view-list", link: "/models/list" }
+            { title: "List", icon: "mdi-view-list", link: "/models/list" },
+            {
+              title: "Predict",
+              icon: "mdi-flask-outline",
+              link: "/models/predict"
+            }
           ]
         },
         // { title: "Experiments", icon: "mdi-view-list", link: "/experiments" },
