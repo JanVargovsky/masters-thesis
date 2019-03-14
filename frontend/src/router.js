@@ -18,6 +18,7 @@ import PreprocessingModify from "./views/preprocessing/Modify.vue";
 
 import CreateClassificationModel from "./views/models/CreateClassification.vue";
 import ModelList from "./views/models/List.vue";
+import ModelDetail from "./views/models/Detail.vue";
 import ModelPredict from "./views/models/Predict.vue";
 
 Vue.use(Router);
@@ -84,6 +85,11 @@ export default new Router({
     {
       path: "/models/predict",
       component: ModelPredict
+    },
+    {
+      path: "/models/:model",
+      component: ModelDetail,
+      props: true
     },
     {
       path: "*",

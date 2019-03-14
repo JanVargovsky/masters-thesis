@@ -25,7 +25,7 @@ classification_test_run = api.model('ClassificationTestRun', {
 
 
 @api.route('/test-run')
-class ClassificationTestRun(Resource):
+class TestRun(Resource):
     @api.expect(classification_test_run, validate=True)
     def post(self):
         dataset = api.payload['dataset']
@@ -166,6 +166,9 @@ class Model(Resource):
             'score': score,
             'plots': plots
         }
+
+    def get(self, name):
+        return load_model_metadata(name)
 
     def delete(self, name):
         remove_model(name)
