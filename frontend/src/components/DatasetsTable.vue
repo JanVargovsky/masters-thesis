@@ -24,11 +24,7 @@
         :pagination.sync="pagination"
         :rows-per-page-items="[10, 25, 50, 100]"
       >
-        <v-progress-linear
-          slot="progress"
-          color="blue"
-          indeterminate
-        ></v-progress-linear>
+        <v-progress-linear slot="progress" color="blue" indeterminate />
 
         <template slot="items" slot-scope="props">
           <td class="shrink">

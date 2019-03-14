@@ -39,11 +39,7 @@
               successfully uploaded.
             </v-alert>
           </v-flex>
-          <v-progress-linear
-            v-if="fetchLoading"
-            slot="progress"
-            color="blue"
-          ></v-progress-linear>
+          <v-progress-linear v-if="fetchLoading" color="blue" indeterminate />
           <v-flex xs12 v-if="datasetDetails">
             <v-list subheader>
               <v-subheader>Details</v-subheader>
