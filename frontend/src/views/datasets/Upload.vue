@@ -8,9 +8,9 @@
         <v-layout row wrap>
           <v-flex xs12>
             <v-text-field
-              label="Select dataset to upload"
+              label="Select dataset(s) to upload"
               @click="$refs.dataset.click()"
-              v-model="dataset"
+              :value="datasetFileNames"
               prepend-icon="mdi-database"
               clearable
               @click:clear="reset"
@@ -21,21 +21,26 @@
               ref="dataset"
               :accept="acceptedDatasetExtensions"
               @change="onChange"
+              multiple
             />
           </v-flex>
           <v-flex xs12>
             <v-alert :value="error" type="error" transition="scale-transition"
               >Server error.</v-alert
             >
-            <v-alert :value="done" type="success" transition="scale-transition">
-              Dataset <strong>{{ dataset }}</strong> has been successfully
-              uploaded.
+            <v-alert
+              :value="uploadedDatasets"
+              type="success"
+              transition="scale-transition"
+            >
+              Dataset <strong>{{ uploadedDatasets }}</strong> has been
+              successfully uploaded.
             </v-alert>
           </v-flex>
           <v-flex xs12>
             <v-btn
               color="primary"
-              :disabled="!dataset"
+              :disabled="!datasetFiles"
               :loading="loading"
               @click="submit"
               >Upload</v-btn
@@ -53,54 +58,50 @@ import { extensions } from "@/infrastructure/dataset";
 export default {
   data() {
     return {
-      dataset: undefined,
-      datasetFile: undefined,
+      datasetFiles: undefined,
 
       loading: false,
-      done: false,
+      uploadedDatasets: undefined,
       error: false
     };
   },
   methods: {
     onChange(e) {
       this.error = false;
-      this.done = false;
-      const files = e.target.files;
-      if (files[0] !== undefined) {
-        this.dataset = files[0].name;
-        this.datasetFile = files[0];
-      } else {
-        this.dataset = undefined;
-        this.datasetFile = undefined;
-      }
+      this.uploadedDatasets = undefined;
+      this.datasetFiles = Array.from(e.target.files);
     },
     async submit() {
       try {
         this.error = false;
-        this.done = false;
+        this.uploadedDatasets = undefined;
         this.loading = true;
 
         let formData = new FormData();
-        formData.append("dataset", this.datasetFile);
-        await this.$http.post(`/api/v1/dataset/${this.dataset}`, formData, {
+        this.datasetFiles.forEach(f => formData.append("datasets", f));
+        await this.$http.post(`/api/v1/dataset`, formData, {
           headers: {
             "Content-Type": "multipart/form-data"
           }
         });
-        this.done = true;
+        this.uploadedDatasets = this.datasetFileNames;
       } catch (error) {
         this.error = true;
       }
       this.loading = false;
     },
     reset() {
-      this.done = false;
       this.error = false;
+      this.uploadedDatasets = undefined;
     }
   },
   computed: {
     acceptedDatasetExtensions: function() {
       return extensions.join(",");
+    },
+    datasetFileNames: function() {
+      if (!this.datasetFiles) return "";
+      return this.datasetFiles.map(t => t.name).join(", ");
     }
   }
 };

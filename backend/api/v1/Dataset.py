@@ -34,9 +34,13 @@ class Dataset(DatasetBase):
         delete_dataset(dataset)
         return None, 204
 
-    def post(self, dataset):
-        file = request.files['dataset']
-        file.save(datasets_path + dataset)
+
+@api.route('')
+class Upload(Resource):
+    def post(self):
+        datasets = request.files.getlist("datasets")
+        for dataset in datasets:
+            dataset.save(datasets_path + dataset.filename)
         return None, 201
 
 
