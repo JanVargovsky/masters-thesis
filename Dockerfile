@@ -1,6 +1,6 @@
 FROM node:lts-alpine as frontend-build
 WORKDIR /app
-COPY frontend ./
+COPY frontend .
 RUN yarn install
 RUN yarn build
 
