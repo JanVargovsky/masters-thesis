@@ -136,7 +136,7 @@ moons_model = api.model('GenerateMoonsDataset', {
 
 @api.route('/moons')
 @api.expect(moons_model, validate=True)
-class Classification(DatasetGeneratorBase):
+class Moons(DatasetGeneratorBase):
     def _generate(self, random_state):
         rows = api.payload['rows']
         noise = api.payload['noise']

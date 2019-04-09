@@ -58,7 +58,6 @@ class DatasetRows(Resource):
         }
 
 
-@api.route('/<string:dataset>/statistics')
 @api.route('/<string:dataset>/statistics/<string:configuration>')
 class DatasetStatistics(Resource):
     def get(self, dataset, configuration=None):
@@ -116,6 +115,12 @@ class DatasetStatistics(Resource):
         store(dataset, configuration, result)
 
         return result
+
+
+@api.route('/<string:dataset>/statistics')
+class DatasetStatisticsWithoutConfiguration(DatasetStatistics):
+    def get(self, dataset):
+        return super(DatasetStatisticsWithoutConfiguration, self).get(dataset)
 
 
 @api.route('/<string:dataset>/configurations')
