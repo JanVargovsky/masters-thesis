@@ -40,7 +40,7 @@ def modify(df, columns):
             if column['encode']:
                 encode_method = column['encodeMethod']
                 if encode_method == 'label':
-                    df[name] = df[name].factorize()[0]
+                    df[name] = df[name].astype('category').cat.codes.astype('category')
                 elif encode_method == 'oneHot':
                     dummies = pd.get_dummies(df[name], prefix=name)
                     df.drop(name, axis=1, inplace=True)

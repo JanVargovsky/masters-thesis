@@ -75,7 +75,7 @@ class DatasetStatistics(Resource):
             series = df[column_name]
             describe = series.describe()
 
-            is_numeric = np.issubdtype(series.dtype, np.number)
+            is_numeric = np.issubdtype(series.dtype.type, np.number)
             if is_numeric:
                 descriptive_statistics = {
                     "count": int(describe["count"]),

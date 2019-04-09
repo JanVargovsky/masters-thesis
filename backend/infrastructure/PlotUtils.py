@@ -60,8 +60,7 @@ def plot_history_loss(history):
 
 def plot_classification_predictions(expected_predictions, actual_predictions,
                                     orientation='vertical', stacked=False):
-    classes = expected_predictions.unique()
-    classes.sort()
+    classes = np.sort(expected_predictions.unique())
     predicted_classes_correct = np.zeros(classes.size, dtype=int)
     predicted_classes_incorrect = np.zeros(classes.size, dtype=int)
 
