@@ -120,6 +120,7 @@
                   row
                   class="pl-3"
                 >
+                  <v-radio label="Discard" value="discard" color="green" />
                   <v-radio
                     v-if="isNumber(column)"
                     label="Using 0"

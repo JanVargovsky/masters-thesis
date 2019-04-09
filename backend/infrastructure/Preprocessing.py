@@ -16,21 +16,25 @@ def modify(df, columns):
         else:
             if column['na']:
                 na_method = column['naMethod']
-                if na_method == 'zero':
-                    na_value = 0
-                elif na_method == 'average':
-                    na_value = df[name].mean()
-                elif na_method == 'common':
-                    na_value = df[name].value_counts().idxmax()
-                elif na_method == 'custom':
-                    na_value = column['naCustomValue']
+                if na_method == 'discard':
+                    df.dropna(subset=[name], inplace=True)
                 else:
-                    raise Exception("Column '{}' invalid na method".format(name))
-                df[name].fillna(na_value, inplace=True)
+                    if na_method == 'zero':
+                        na_value = 0
+                    elif na_method == 'average':
+                        na_value = df[name].mean()
+                    elif na_method == 'common':
+                        na_value = df[name].value_counts().idxmax()
+                    elif na_method == 'custom':
+                        na_value = column['naCustomValue']
+                    else:
+                        raise Exception("Column '{}' invalid na method".format(name))
+                    df[name].fillna(na_value, inplace=True)
             if column['normalize']:
                 normalize_min, normalize_max = column['normalizeRange']['min'], column['normalizeRange']['max']
                 if normalize_min >= normalize_max:
-                    raise Exception("Column '{}' has invalid normalize range {} < {}".format(name, normalize_min, normalize_max))
+                    raise Exception(
+                        "Column '{}' has invalid normalize range {} < {}".format(name, normalize_min, normalize_max))
                 scaler = MinMaxScaler(feature_range=(normalize_min, normalize_max))
                 df[name] = scaler.fit_transform(df[[name]])
             if column['encode']:

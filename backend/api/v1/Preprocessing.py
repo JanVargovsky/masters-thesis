@@ -47,7 +47,7 @@ dataset_modify_column = api.model('PreprocessingDatasetModifyColumn', {
 
     'na': fields.Boolean(default=False, description='Replace NA values'),
     'naMethod': fields.String(desription='Replacement method of NA values',
-                              enum=['zero', 'average', 'common', 'custom']),
+                              enum=['discard', 'zero', 'average', 'common', 'custom']),
     'naCustomValue': fields.String(description='Custom replacement value of NA values'),
 
     'encode': fields.Boolean(default=False, description='Encode categorical'),
