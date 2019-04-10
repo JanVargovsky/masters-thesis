@@ -70,6 +70,7 @@ def save_dataset(dataset, name):
     elif file_type == 'pickle':
         dataset.to_pickle(path)
     elif file_type == 'feather':
+        dataset.reset_index(drop=True, inplace=True)
         dataset.to_feather(path)
     elif file_type == 'parquet':
         dataset.to_parquet(path)
