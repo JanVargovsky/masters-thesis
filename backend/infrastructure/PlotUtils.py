@@ -26,7 +26,9 @@ def plot_histogram(series, column_name, is_numeric):
         plt.ylabel("Frequency")
         value_counts = series.value_counts(dropna=False)
         for value, count in value_counts.iteritems():
-            plt.bar(str(value), count)
+            x = "N/A" if value is np.NaN else str(value)
+            plt.bar(x, count)
+            plt.text(x, count, count, horizontalalignment='center', verticalalignment='bottom')
 
 
 def plot_box_and_violin(series):
