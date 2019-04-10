@@ -88,7 +88,7 @@
               <v-flex shrink>
                 <v-text-field
                   v-if="column.normalize"
-                  v-model="column.normalizeRange.min"
+                  v-model.number="column.normalizeRange.min"
                   class="pl-3"
                   label="Min"
                   type="number"
@@ -97,7 +97,7 @@
               <v-flex shrink>
                 <v-text-field
                   v-if="column.normalize"
-                  v-model="column.normalizeRange.max"
+                  v-model.number="column.normalizeRange.max"
                   class="pl-3"
                   label="Max"
                   type="number"
@@ -334,8 +334,8 @@ export default {
             remove: column.remove,
             normalize: column.normalize,
             normalizeRange: {
-              min: parseFloat(column.normalizeRange.min),
-              max: parseFloat(column.normalizeRange.max)
+              min: column.normalizeRange.min,
+              max: column.normalizeRange.max
             },
             na: column.na,
             naMethod: column.naMethod,

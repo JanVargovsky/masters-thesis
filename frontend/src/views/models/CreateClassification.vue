@@ -160,14 +160,14 @@
                 <v-layout row wrap>
                   <v-flex xs12>
                     <v-text-field
-                      v-model="epochs"
+                      v-model.number="epochs"
                       type="number"
                       label="Epochs"
                     />
                   </v-flex>
                   <v-flex xs12>
                     <v-text-field
-                      v-model="validationSplit"
+                      v-model.number="validationSplit"
                       type="number"
                       label="Validation split"
                       hide-details
@@ -231,7 +231,7 @@
                       </v-flex>
                       <v-flex shrink>
                         <v-text-field
-                          v-model="layers[index]"
+                          v-model.number="layers[index]"
                           type="number"
                           :label="'Dense layer ' + (index + 1)"
                           flat
@@ -464,15 +464,15 @@ export default {
         const payload = {
           dataset: this.dataset,
           labelColumn: this.labelColumn,
-          epochs: parseInt(this.epochs),
+          epochs: this.epochs,
           layers: this.layers
         };
 
         if (this.useConfiguration && this.configuration)
           payload.configuration = this.configuration;
 
-        const validationSplit = parseFloat(this.validationSplit);
-        if (!isNaN(validationSplit)) payload.validationSplit = validationSplit;
+        if (this.validationSplit)
+          payload.validationSplit = this.validationSplit;
 
         const response = await this.$http.post(
           `/api/v1/classification/test-run`,
@@ -496,15 +496,15 @@ export default {
         const payload = {
           dataset: this.dataset,
           labelColumn: this.labelColumn,
-          epochs: parseInt(this.epochs),
+          epochs: this.epochs,
           layers: this.layers
         };
 
         if (this.useConfiguration && this.configuration)
           payload.configuration = this.configuration;
 
-        const validationSplit = parseFloat(this.validationSplit);
-        if (!isNaN(validationSplit)) payload.validationSplit = validationSplit;
+        if (this.validationSplit)
+          payload.validationSplit = this.validationSplit;
 
         const response = await this.$http.post(
           `/api/v1/classification/${this.modelName}`,

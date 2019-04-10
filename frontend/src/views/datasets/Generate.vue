@@ -18,28 +18,28 @@
         <template v-if="typeName == 'Classification'">
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.rows"
+              v-model.number="type.params.rows"
               type="number"
               label="Number of rows"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.features"
+              v-model.number="type.params.features"
               type="number"
               label="Number of features"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.classes"
+              v-model.number="type.params.classes"
               type="number"
               label="Number of classes"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.informative"
+              v-model.number="type.params.informative"
               type="number"
               label="Number of informative features"
             />
@@ -48,28 +48,28 @@
         <template v-else-if="typeName == 'Blobs'">
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.rows"
+              v-model.number="type.params.rows"
               type="number"
               label="Number of rows"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.features"
+              v-model.number="type.params.features"
               type="number"
               label="Number of features"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.classes"
+              v-model.number="type.params.classes"
               type="number"
               label="Number of classes"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.clusterStd"
+              v-model.number="type.params.clusterStd"
               type="number"
               label="Standard deviation of each cluster"
             />
@@ -78,14 +78,14 @@
         <template v-else-if="typeName == 'Circles' || typeName == 'Moons'">
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.rows"
+              v-model.number="type.params.rows"
               type="number"
               label="Number of rows"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.noise"
+              v-model.number="type.params.noise"
               type="number"
               label="Noise"
             />
@@ -94,21 +94,21 @@
         <template v-else-if="typeName == 'Gaussian quantiles'">
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.rows"
+              v-model.number="type.params.rows"
               type="number"
               label="Number of rows"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.features"
+              v-model.number="type.params.features"
               type="number"
               label="Number of features"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.classes"
+              v-model.number="type.params.classes"
               type="number"
               label="Number of classes"
             />
@@ -117,21 +117,21 @@
         <template v-else-if="typeName == 'S curve' || typeName == 'Swiss roll'">
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.rows"
+              v-model.number="type.params.rows"
               type="number"
               label="Number of rows"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.noise"
+              v-model.number="type.params.noise"
               type="number"
               label="Noise"
             />
           </v-flex>
           <v-flex xs12>
             <v-text-field
-              v-model="type.params.classes"
+              v-model.number="type.params.classes"
               type="number"
               label="Number of classes"
               hint="Leave 0 for continuous class (regression)"
@@ -352,7 +352,6 @@ export default {
     },
     getPayload(isSave) {
       const payload = { ...this.type.params };
-      Object.keys(payload).map(t => (payload[t] = parseFloat(payload[t])));
       if (isSave) {
         payload.datasetName = this.type.datasetName;
         if (this.type.preview && this.type.preview.randomState)
