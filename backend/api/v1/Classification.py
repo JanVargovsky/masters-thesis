@@ -69,15 +69,6 @@ class TestRun(Resource):
         plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=False)
         plots['predictions'] = plot_to_base64()
 
-        plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=True)
-        plots['predictions2'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=False)
-        plots['predictions3'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=True)
-        plots['predictions4'] = plot_to_base64()
-
         return {
             'score': score,
             'plots': plots
@@ -140,15 +131,6 @@ class Model(Resource):
         plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=False)
         plots['predictions'] = plot_to_base64()
 
-        plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=True)
-        plots['predictions2'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=False)
-        plots['predictions3'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=True)
-        plots['predictions4'] = plot_to_base64()
-
         metadata = {
             'dataset': dataset,
             'configuration': configuration_name if 'configuration' in api.payload else None,
@@ -198,15 +180,6 @@ class Predict(Resource):
 
         plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=False)
         plots['predictions'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='vertical', stacked=True)
-        plots['predictions2'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=False)
-        plots['predictions3'] = plot_to_base64()
-
-        plot_classification_predictions(data_y, predicts, orientation='horizontal', stacked=True)
-        plots['predictions4'] = plot_to_base64()
 
         return {
             'score': score,

@@ -87,6 +87,15 @@ def plot_classification_predictions(expected_predictions, actual_predictions,
             w = 0.4
             plt.bar(x - w / 2, predicted_classes_correct, width=w, color='tab:green', label='Correct')
             plt.bar(x + w / 2, predicted_classes_incorrect, width=w, color='tab:red', label='Incorrect')
+
+            for xi, correct, incorrect in zip(x, predicted_classes_correct, predicted_classes_incorrect):
+                if correct:
+                    plt.text(xi - w / 2, correct, str(correct), horizontalalignment='center',
+                             verticalalignment='bottom')
+                if incorrect:
+                    plt.text(xi + w / 2, incorrect, str(incorrect), horizontalalignment='center',
+                             verticalalignment='bottom')
+
     elif orientation == 'horizontal':
         y = np.arange(classes.size)
         plt.xlabel("Count")
