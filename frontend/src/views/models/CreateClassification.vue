@@ -334,6 +334,10 @@
               </v-flex>
             </v-layout>
           </v-flex>
+          <v-flex xs12 v-if="confusionMatrix && confusionMatrix.length > 0">
+            <v-subheader class="pa-0">Confusion matrix</v-subheader>
+            <confusion-matrix :matrix="confusionMatrix" />
+          </v-flex>
         </v-layout>
       </v-form>
     </v-card-text>
@@ -343,8 +347,12 @@
 <script>
 import store from "../../store.js";
 import { scoreToIcon } from "@/infrastructure/model";
+import ConfusionMatrix from "@/components/ConfusionMatrix";
 
 export default {
+  components: {
+    ConfusionMatrix
+  },
   data() {
     return {
       datasets: store.state.datasets,
@@ -369,7 +377,8 @@ export default {
       createLoading: false,
       createdModel: undefined,
       score: undefined,
-      plots: []
+      plots: [],
+      confusionMatrix: []
     };
   },
   methods: {
@@ -481,10 +490,12 @@ export default {
         const data = response.data;
         this.score = data.score;
         this.plots = data.plots;
+        this.confusionMatrix = data.confusionMatrix;
       } catch {
         this.error = true;
         this.score = undefined;
         this.plots = [];
+        this.confusionMatrix = [];
       }
       this.testRunLoading = false;
     },
@@ -514,10 +525,12 @@ export default {
         this.createdModel = this.modelName;
         this.score = data.score;
         this.plots = data.plots;
+        this.confusionMatrix = data.confusionMatrix;
       } catch {
         this.error = true;
         this.score = undefined;
         this.plots = [];
+        this.confusionMatrix = [];
       }
       this.createLoading = false;
     }

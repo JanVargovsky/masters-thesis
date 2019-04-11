@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
 from flask_restplus import Namespace, Resource, fields
+from sklearn.metrics import confusion_matrix
 from sklearn.utils import shuffle
 from tensorflow import keras
 
@@ -58,6 +59,7 @@ class TestRun(Resource):
         history = model.fit(x=data_x, y=data_y, epochs=epochs, verbose=2, validation_split=validation_split)
         predicts = model.predict_classes(data_x)
         score = float((data_y == predicts).sum() / predicts.size)
+        conf_matrix = confusion_matrix(data_y, predicts)
 
         plots = OrderedDict()
 
@@ -71,7 +73,8 @@ class TestRun(Resource):
 
         return {
             'score': score,
-            'plots': plots
+            'plots': plots,
+            'confusionMatrix': conf_matrix.tolist()
         }
 
 
@@ -120,6 +123,7 @@ class Model(Resource):
         history = model.fit(x=data_x, y=data_y, epochs=epochs, verbose=2, validation_split=validation_split)
         predicts = model.predict_classes(data_x)
         score = float((data_y == predicts).sum() / predicts.size)
+        conf_matrix = confusion_matrix(data_y, predicts)
 
         plots = OrderedDict()
 
@@ -140,13 +144,15 @@ class Model(Resource):
             'score': score,
             'epochs': epochs,
             'layers': layers,
-            'plots': plots
+            'plots': plots,
+            'confusionMatrix': conf_matrix.tolist()
         }
         save_model(model, name, metadata)
 
         return {
             'score': score,
-            'plots': plots
+            'plots': plots,
+            'confusionMatrix': conf_matrix.tolist()
         }
 
     def get(self, name):
@@ -175,6 +181,7 @@ class Predict(Resource):
 
         predicts = model.predict_classes(data_x)
         score = float((data_y == predicts).sum() / predicts.size)
+        conf_matrix = confusion_matrix(data_y, predicts)
 
         plots = OrderedDict()
 
@@ -183,7 +190,8 @@ class Predict(Resource):
 
         return {
             'score': score,
-            'plots': plots
+            'plots': plots,
+            'confusionMatrix': conf_matrix.tolist()
         }
 
 

@@ -57,6 +57,10 @@
               </v-flex>
             </v-layout>
           </v-flex>
+          <v-flex xs12 v-if="confusionMatrix && confusionMatrix.length > 0">
+            <v-subheader class="pa-0">Confusion matrix</v-subheader>
+            <confusion-matrix :matrix="confusionMatrix" />
+          </v-flex>
         </v-layout>
       </v-form>
     </v-card-text>
@@ -66,8 +70,12 @@
 <script>
 import store from "@/store";
 import { scoreToIcon } from "@/infrastructure/model";
+import ConfusionMatrix from "@/components/ConfusionMatrix";
 
 export default {
+  components: {
+    ConfusionMatrix
+  },
   data() {
     return {
       datasets: store.state.datasets,
@@ -80,6 +88,7 @@ export default {
       predictLoading: false,
       score: undefined,
       plots: [],
+      confusionMatrix: [],
 
       error: false
     };
@@ -110,6 +119,7 @@ export default {
         const data = response.data;
         this.score = data.score;
         this.plots = data.plots;
+        this.confusionMatrix = data.confusionMatrix;
       } catch {
         this.error = true;
       } finally {
