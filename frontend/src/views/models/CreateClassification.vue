@@ -298,6 +298,22 @@
                 dark
                 >Test run</v-btn
               >
+              <v-menu offset-y>
+                <template slot="activator">
+                  <v-btn :loading="crossValidationLoading" color="green" dark>
+                    Cross validate
+                  </v-btn>
+                </template>
+                <v-list>
+                  <v-list-tile
+                    v-for="(item, index) in [3, 4, 5, 10]"
+                    :key="index"
+                    @click="crossValidate(item)"
+                  >
+                    <v-list-tile-title>{{ item }}-fold</v-list-tile-title>
+                  </v-list-tile>
+                </v-list>
+              </v-menu>
               <v-btn
                 @click="create"
                 :loading="createLoading"
@@ -318,6 +334,15 @@
               >Model <strong>{{ createdModel }}</strong> has been successfully
               created.</v-alert
             >
+          </v-flex>
+          <v-flex xs12 v-if="crossValidationScore">
+            <v-layout justify-center column>
+              <v-icon size="100">{{ scoreIcon }}</v-icon>
+              <span class="text-xs-center body-2"
+                >Cross-validation accuracy:
+                {{ (crossValidationScore * 100) | round(2) }}%</span
+              >
+            </v-layout>
           </v-flex>
           <v-flex xs12 v-if="score">
             <v-layout justify-center column>
@@ -374,7 +399,9 @@ export default {
 
       error: false,
       testRunLoading: false,
+      crossValidationLoading: false,
       createLoading: false,
+      crossValidationScore: undefined,
       createdModel: undefined,
       score: undefined,
       plots: [],
@@ -470,69 +497,89 @@ export default {
         this.error = false;
         this.createdModel = undefined;
         this.testRunLoading = true;
-        const payload = {
-          dataset: this.dataset,
-          labelColumn: this.labelColumn,
-          epochs: this.epochs,
-          layers: this.layers
-        };
-
-        if (this.useConfiguration && this.configuration)
-          payload.configuration = this.configuration;
-
-        if (this.validationSplit)
-          payload.validationSplit = this.validationSplit;
+        const payload = this.getPayload();
 
         const response = await this.$http.post(
           `/api/v1/classification/test-run`,
           payload
         );
         const data = response.data;
+        this.resetResults();
         this.score = data.score;
         this.plots = data.plots;
         this.confusionMatrix = data.confusionMatrix;
       } catch {
         this.error = true;
-        this.score = undefined;
-        this.plots = [];
-        this.confusionMatrix = [];
+        this.resetResults();
       }
       this.testRunLoading = false;
+    },
+    async crossValidate(kfolds) {
+      try {
+        this.error = false;
+        this.createdModel = undefined;
+        this.crossValidationLoading = true;
+        const payload = this.getPayload(false);
+        payload.kfolds = kfolds;
+
+        const response = await this.$http.post(
+          `/api/v1/classification/cross-validation`,
+          payload
+        );
+        const data = response.data;
+        this.resetResults();
+        this.crossValidationScore = this.$_.mean(data.testScores);
+        this.plots = data.plots;
+      } catch {
+        this.error = true;
+        this.resetResults();
+      }
+      this.crossValidationLoading = false;
     },
     async create() {
       try {
         this.error = false;
         this.createdModel = undefined;
         this.createLoading = true;
-        const payload = {
-          dataset: this.dataset,
-          labelColumn: this.labelColumn,
-          epochs: this.epochs,
-          layers: this.layers
-        };
-
-        if (this.useConfiguration && this.configuration)
-          payload.configuration = this.configuration;
-
-        if (this.validationSplit)
-          payload.validationSplit = this.validationSplit;
+        const payload = this.getPayload();
 
         const response = await this.$http.post(
           `/api/v1/classification/${this.modelName}`,
           payload
         );
         const data = response.data;
+        this.resetResults();
         this.createdModel = this.modelName;
         this.score = data.score;
         this.plots = data.plots;
         this.confusionMatrix = data.confusionMatrix;
       } catch {
         this.error = true;
-        this.score = undefined;
-        this.plots = [];
-        this.confusionMatrix = [];
+        this.resetResults();
       }
       this.createLoading = false;
+    },
+    getPayload(appendValidationSplit = true) {
+      const payload = {
+        dataset: this.dataset,
+        labelColumn: this.labelColumn,
+        epochs: this.epochs,
+        layers: this.layers
+      };
+
+      if (this.useConfiguration && this.configuration)
+        payload.configuration = this.configuration;
+
+      if (appendValidationSplit && this.validationSplit)
+        payload.validationSplit = this.validationSplit;
+      return payload;
+    },
+    resetResults() {
+      this.createdModel = undefined;
+      this.score = undefined;
+      this.crossValidationScore = undefined;
+      this.plots = [];
+      this.confusionMatrix = [];
     }
   },
   watch: {

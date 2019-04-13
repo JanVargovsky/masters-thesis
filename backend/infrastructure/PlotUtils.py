@@ -140,3 +140,24 @@ def plot_generated_dataset(x, y):
         ax.set_xlabel('X')
         ax.set_ylabel('Y')
         ax.set_zlabel('Z')
+
+
+def plot_cross_validation(train_scores, test_scores, plot_type='bar'):
+    x = np.arange(1, len(train_scores) + 1)
+
+    if plot_type == 'bar':
+        w = 0.2
+        plt.bar(x - w / 2, train_scores, width=w, label="Training set")
+        plt.bar(x + w / 2, test_scores, width=w, label="Test set")
+    elif plot_type == 'plot':
+        plt.plot(x, train_scores, marker='o', label="Training set")
+        plt.plot(x, test_scores, marker='o', label="Test set")
+    else:
+        raise Exception("unknown plot_type '{}'".format(plot_type))
+
+    plt.title("Cross-validation")
+    plt.xticks(x)
+    plt.xlabel("Run")
+    plt.ylabel("Accuracy")
+
+    plt.legend()

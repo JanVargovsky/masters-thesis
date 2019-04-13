@@ -2,6 +2,7 @@ from collections import OrderedDict
 
 from flask_restplus import Namespace, Resource, fields
 from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import StratifiedKFold
 from sklearn.utils import shuffle
 from tensorflow import keras
 
@@ -9,7 +10,7 @@ from infrastructure.Classification import ClassificationModel, save_model, load_
     get_model_names, remove_model
 from infrastructure.DatasetUtils import get_dataset
 from infrastructure.PlotUtils import plot_history_accuracy, plot_history_loss, plot_to_base64, \
-    plot_classification_predictions
+    plot_classification_predictions, plot_cross_validation
 from infrastructure.Preprocessing import modify
 from infrastructure.PreprocessingConfiguration import load_configuration
 
@@ -37,7 +38,7 @@ class TestRun(Resource):
             configuration = load_configuration(dataset, configuration_name)
             modify(df, configuration)
 
-        df = shuffle(df, random_state=42)
+        df = shuffle(df)
 
         label = api.payload['labelColumn']
         data_x = df.drop(label, axis=1)
@@ -78,6 +79,75 @@ class TestRun(Resource):
         }
 
 
+cross_validation_classification_model = api.model('CrossValidationClassificationModel', {
+    'dataset': fields.String(required=True, description='Dataset'),
+    'labelColumn': fields.String(required=True, description='Name of the label column'),
+    'configuration': fields.String(description='Configuration name'),
+    'epochs': fields.Integer(required=True, min=1, description='Number of epochs to train the model'),
+    'layers': fields.List(fields.Integer, required=True, description="Number of neurons in each dense layer"),
+    'kfolds': fields.Integer(min=3, max=10, description="Number of k-folds")
+})
+
+
+@api.route('/cross-validation')
+class CrossValidation(Resource):
+    @api.expect(cross_validation_classification_model, validate=True)
+    def post(self):
+        dataset = api.payload['dataset']
+        df = get_dataset(dataset)
+
+        if 'configuration' in api.payload:
+            configuration_name = api.payload['configuration']
+            configuration = load_configuration(dataset, configuration_name)
+            modify(df, configuration)
+
+        label = api.payload['labelColumn']
+        data_x = df.drop(label, axis=1)
+        data_y = df[label]
+
+        input_dim = data_x.columns.size
+        output_dim = data_y.unique().size
+        epochs = api.payload['epochs']
+        layers = api.payload['layers']
+        for layer in layers:
+            if layer <= 0:
+                return "Invalid layer", 400
+
+        train_scores = []
+        test_scores = []
+        kfolds = api.payload['kfolds'] if 'kfolds' in api.payload else 10
+        kf = StratifiedKFold(n_splits=kfolds, shuffle=True)
+        for train_indices, test_indices in kf.split(data_x, data_y):
+            train_x, train_y = data_x.iloc[train_indices], data_y.iloc[train_indices]
+            test_x, test_y = data_x.iloc[test_indices], data_y.iloc[test_indices]
+
+            keras.backend.clear_session()
+            model = ClassificationModel(input_dim, output_dim, layers)
+
+            model.fit(x=train_x, y=train_y.values, epochs=epochs, verbose=2)
+
+            predicts = model.predict_classes(train_x)
+            score = float((train_y == predicts).sum() / predicts.size)
+            train_scores.append(score)
+
+            predicts = model.predict_classes(test_x)
+            score = float((test_y == predicts).sum() / predicts.size)
+            test_scores.append(score)
+
+        plots = OrderedDict()
+
+        plot_cross_validation(train_scores, test_scores, plot_type='bar')
+        plots['crossValidation'] = plot_to_base64()
+        plot_cross_validation(train_scores, test_scores, plot_type='plot')
+        plots['crossValidation2'] = plot_to_base64()
+
+        return {
+            'trainScores': train_scores,
+            'testScores': test_scores,
+            'plots': plots,
+        }
+
+
 create_classification_model = api.model('CreateClassificationModel', {
     'dataset': fields.String(required=True, description='Dataset'),
     'labelColumn': fields.String(required=True, description='Name of the label column'),
@@ -85,7 +155,6 @@ create_classification_model = api.model('CreateClassificationModel', {
     'epochs': fields.Integer(required=True, min=1, description='Number of epochs to train the model'),
     'layers': fields.List(fields.Integer, required=True, description="Number of neurons in each dense layer"),
     'validationSplit': fields.Float(min=0, max=1, description="Number of neurons in each dense layer")
-    # 'kfolds': fields.Integer(description="Number of k-folds, each fold will create a new model")
 })
 
 
@@ -101,7 +170,7 @@ class Model(Resource):
             configuration = load_configuration(dataset, configuration_name)
             modify(df, configuration)
 
-        df = shuffle(df, random_state=42)
+        df = shuffle(df)
 
         label = api.payload['labelColumn']
         data_x = df.drop(label, axis=1)
