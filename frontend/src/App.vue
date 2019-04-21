@@ -136,7 +136,6 @@ export default {
             }
           ]
         },
-        // { title: "Experiments", icon: "mdi-view-list", link: "/experiments" },
         { title: "About", icon: "mdi-information", link: "/about" }
       ]
     };

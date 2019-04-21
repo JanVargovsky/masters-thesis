@@ -8,8 +8,8 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@babel/polyfill": "^7.0.0-rc.1",
-    "@mdi/font": "^3.5.95",
+    "@babel/polyfill": "^7.4.3",
+    "@mdi/font": "^3.6.95",
     "axios": "^0.18.0",
     "lodash": "^4.17.11",
     "roboto-fontface": "*",

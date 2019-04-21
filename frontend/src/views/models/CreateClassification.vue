@@ -122,13 +122,7 @@
                         icon
                         color="red"
                       >
-                        <!-- <v-icon>mdi-layers-minus</v-icon> -->
-                        <svg style="width:36px;height:36px" viewBox="0 0 24 24">
-                          <path
-                            fill="#F44336"
-                            d="M22,17V19H14V17H22M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
-                          ></path>
-                        </svg>
+                        <v-icon large>mdi-layers-minus</v-icon>
                       </v-btn>
                       <span>Shrink layer</span>
                     </v-tooltip>
@@ -140,13 +134,7 @@
                         icon
                         color="green"
                       >
-                        <!-- <v-icon>mdi-layers-plus</v-icon> -->
-                        <svg style="width:36px;height:36px" viewBox="0 0 24 24">
-                          <path
-                            fill="#4CAF50"
-                            d="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
-                          ></path>
-                        </svg>
+                        <v-icon large>mdi-layers-plus</v-icon>
                       </v-btn>
                       <span>Expand layer</span>
                     </v-tooltip>
@@ -215,16 +203,7 @@
                             icon
                             color="red"
                           >
-                            <!-- <v-icon>mdi-layers-minus</v-icon> -->
-                            <svg
-                              style="width:24px;height:24px"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                fill="#F44336"
-                                d="M22,17V19H14V17H22M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
-                              ></path>
-                            </svg>
+                            <v-icon>mdi-layers-minus</v-icon>
                           </v-btn>
                           <span>Shrink layer</span>
                         </v-tooltip>
@@ -247,16 +226,7 @@
                             icon
                             color="green"
                           >
-                            <!-- <v-icon>mdi-layers-plus</v-icon> -->
-                            <svg
-                              style="width:24px;height:24px"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                fill="#4CAF50"
-                                d="M17,14H19V17H22V19H19V22H17V19H14V17H17V14M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
-                              ></path>
-                            </svg>
+                            <v-icon>mdi-layers-plus</v-icon>
                           </v-btn>
                           <span>Expand layer</span>
                         </v-tooltip>
@@ -269,16 +239,7 @@
                             flat
                             icon
                           >
-                            <!-- <v-icon>mdi-layers-remove</v-icon> -->
-                            <svg
-                              style="width:24px;height:24px"
-                              viewBox="0 0 24 24"
-                            >
-                              <path
-                                fill="#000000"
-                                d="M14.46,15.88L15.88,14.46L18,16.59L20.12,14.46L21.54,15.88L19.41,18L21.54,20.12L20.12,21.54L18,19.41L15.88,21.54L14.46,20.12L16.59,18L14.46,15.88M11,16L2,9L11,2L20,9L11,16M11,18.54L12,17.75V18C12,18.71 12.12,19.39 12.35,20L11,21.07L2,14.07L3.62,12.81L11,18.54Z"
-                              ></path>
-                            </svg>
+                            <v-icon>mdi-layers-remove</v-icon>
                           </v-btn>
                           <span>Delete layer</span>
                         </v-tooltip>
